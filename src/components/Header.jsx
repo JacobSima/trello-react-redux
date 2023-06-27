@@ -28,6 +28,7 @@ const Header = () => {
   const[isEditBoardModalOpen, setIsEditBoardModalOpen] = useState(false);
   const [isElipsisMenuOpen, setIsElipsisMenuOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [windowSize, setWindowSize] = useState([window.innerWidth,window.innerHeight]);
 
   const onDropDownIconClick = () => {
     setIsDropDownOpen(state => !state);
@@ -47,8 +48,22 @@ const Header = () => {
   }
 
   useEffect(() => {
+
     dispatch(boardSlice.actions.setActiveBoard());
-  }, [])
+
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight])
+    }
+    window.addEventListener('resize',handleWindowResize);
+
+    if(windowSize[0] >= 768 && isDropDownOpen){
+      setIsDropDownOpen(false);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize)
+    }
+  }, [windowSize[0]])
 
 
   return (
