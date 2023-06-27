@@ -24,7 +24,7 @@ const App = () => {
               <Center />
             </> 
           )
-        : (<><EmptyBoard type="add"/></>)
+        : (<><EmptyBoard /></>)
        }
         <ToastContainer />
       </div>
