@@ -1,31 +1,31 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Header from './components/Header'
-import boardSlice from './redux/boardSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { ToastContainer , toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Center from './components/Center';
+import EmptyBoard from './components/EmptyBoard';
 
 const App = () => {
 
-  const dispatch = useDispatch();
-
   const boards = useSelector(state => state.boardsData.boards)
-
-  useEffect(() => {
-    // Initialized activeBoard
-    dispatch(boardSlice.actions.setActiveBoard());
-  }, [])
-
-  const notify = () => toast("Wow so easy !");
 
   return (
     <>
       <div className="overflow-hidden overflow-x-scroll">
+       {
+        boards?.length > 0
+        ? (
+            <>
+              {/* Header Section  */}
+              <Header />
 
-        <>
-          {/* Header Section  */}
-          <Header />
-        </> 
+              {/* Center Section */}
+              <Center />
+            </> 
+          )
+        : (<><EmptyBoard type="add"/></>)
+       }
         <ToastContainer />
       </div>
 

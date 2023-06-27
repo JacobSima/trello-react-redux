@@ -6,7 +6,7 @@ import notify from '../../utils/notify';
 import boardSlice from '../../redux/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-const AddBoardModal = ({setIsAddBoardModalOpen}) => {
+const AddBoardModal = ({setIsAddBoardModalOpen, setBoardModalOpen}) => {
 
   const dispatch = useDispatch();
 
@@ -48,15 +48,17 @@ const AddBoardModal = ({setIsAddBoardModalOpen}) => {
     dispatch(boardSlice.actions.setActiveBoard());
 
     notify("Board Added");
-    setIsAddBoardModalOpen(false);
+    setIsAddBoardModalOpen && setIsAddBoardModalOpen(false);
+    setBoardModalOpen && setBoardModalOpen(false)
   };
 
   return (
     <div
-      className="py-10 px-6 absolute left-0 right-0 bottom-[-100vh] top-16 bg-[#00000086]"
+      className={`py-10 px-6 absolute left-0 right-0 ${boards?.length > 0 ? "bottom-[-100vh]" : "bottom-[-2vh]"}  top-16 bg-[#00000086]`}
       onClick={e => {
         if(e.target !== e.currentTarget) return;
-        setIsAddBoardModalOpen(false);
+        setIsAddBoardModalOpen && setIsAddBoardModalOpen(false);
+        setBoardModalOpen && setBoardModalOpen(false)
       }}
     >
       <div>

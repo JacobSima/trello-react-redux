@@ -46,6 +46,10 @@ const Header = () => {
     setIsDeleteModalOpen(false);
   }
 
+  useEffect(() => {
+    dispatch(boardSlice.actions.setActiveBoard());
+  }, [])
+
 
   return (
     <div 
