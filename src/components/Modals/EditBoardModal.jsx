@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from "uuid";
 import crossIcon from "../../assets/icon-cross.svg";
 import { isNullOrUndefinedOrEmpty, isStringArrayValide } from '../../utils/validations';
@@ -6,19 +6,17 @@ import notify from '../../utils/notify';
 import boardSlice from '../../redux/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-const AddBoardModal = ({setIsAddBoardModalOpen}) => {
+const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen}) => {
 
   const dispatch = useDispatch();
 
   // Global state
-  const boards = useSelector(state => state.boardsData.boards);
+  const activeBoard = useSelector(state => state.boardsData.activeBoard);
+  const columns = activeBoard.columns;
 
   // Local state
   const [name, setName] = useState("");
-  const [newColumns, setNewColumns] = useState([
-    { name: "Todo", tasks: [], id: uuidv4() },
-    { name: "Doing", tasks: [], id: uuidv4() },
-  ]);
+  const [newColumns, setNewColumns] = useState([]);
 
   const onChange = (id, newValue) => {
     setNewColumns(prevState => {
@@ -33,30 +31,40 @@ const AddBoardModal = ({setIsAddBoardModalOpen}) => {
     setNewColumns((prevState) => prevState.filter((el) => el.id !== id));
   };
 
-  // Submit Creation
+  // Edition of Board
   const onSubmit = () => {
     // run form validation
     const data = newColumns?.map(col => col?.name);
-    const boardIndex = boards.length;
+
 
     if(isNullOrUndefinedOrEmpty(name) || !isStringArrayValide(data)){
       notify("Form is invalid");
       return;
     }
 
-    dispatch(boardSlice.actions.addBoard({ name, newColumns, id: uuidv4(), pos: boardIndex }));
+    dispatch(boardSlice.actions.editBoard({ name, newColumns}));
     dispatch(boardSlice.actions.setActiveBoard());
 
-    notify("Board Added");
-    setIsAddBoardModalOpen(false);
+    notify("Board Edited");
+    setIsEditBoardModalOpen(false);
   };
+
+  useEffect(() => {
+    setIsElipsisMenuOpen(false);
+    setNewColumns(
+      columns.map(col => {
+        return {...col}
+      })
+    );
+    setName(activeBoard.name);
+  },[])
 
   return (
     <div
       className="py-10 px-6 absolute left-0 right-0 bottom-[-100vh] top-16 bg-[#00000086]"
       onClick={e => {
         if(e.target !== e.currentTarget) return;
-        setIsAddBoardModalOpen(false);
+        setIsEditBoardModalOpen(false);
       }}
     >
       <div>
@@ -67,7 +75,7 @@ const AddBoardModal = ({setIsAddBoardModalOpen}) => {
         className=" overflow-y-scroll max-h-[85vh]  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold
         shadow-md shadow-[#364e7e1a] max-w-md mx-auto my-auto w-full px-8  py-8 rounded-xl"
         >
-          <h3 className="text-lg">Add New Board</h3>
+          <h3 className="text-lg">Edit Board</h3>
 
           {/* Task Name */}
           <div className="mt-8 flex flex-col space-y-1">
@@ -122,7 +130,7 @@ const AddBoardModal = ({setIsAddBoardModalOpen}) => {
                 onClick={() => onSubmit()}
                 className=" w-full items-center hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative  text-white bg-[#635fc7] py-2 rounded-full"
               >
-                Create New Board
+                Save Changes
               </button>
             </div>
 
@@ -135,4 +143,4 @@ const AddBoardModal = ({setIsAddBoardModalOpen}) => {
   )
 }
 
-export default AddBoardModal
+export default EditBoardModal

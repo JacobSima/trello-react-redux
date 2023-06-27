@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import logo from '../assets/logo.png';
 import iconDown from '../assets/icon-chevron-down.svg';
 import iconUp from '../assets/icon-chevron-up.svg'
@@ -9,10 +9,13 @@ import { MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import boardSlice from '../redux/boardSlice';
 import HeaderDropdown from './HeaderDropdown';
 import AddBoardModal from './Modals/AddBoardModal';
+import EditBoardModal from './Modals/EditBoardModal';
+import DeleteBoardModal from './Modals/DeleteBoardModal';
+import notify from '../utils/notify';
 
 const Header = () => {
 
-  const disptach = useDispatch();
+  const dispatch = useDispatch();
 
   // Global state
   const boards = useSelector(state => state.boardsData.boards)
@@ -22,6 +25,9 @@ const Header = () => {
   // Local state
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const[isAddBoardModalOpen, setIsAddBoardModalOpen] = useState(false);
+  const[isEditBoardModalOpen, setIsEditBoardModalOpen] = useState(false);
+  const [isElipsisMenuOpen, setIsElipsisMenuOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const onDropDownIconClick = () => {
     setIsDropDownOpen(state => !state);
@@ -33,7 +39,12 @@ const Header = () => {
     debounceSearch((e.target.value));
   }
 
-
+  const deleteBoard = () => {
+    dispatch(boardSlice.actions.deleteBoard({id : activeBoard?.id}));
+    dispatch(boardSlice.actions.setActiveBoard());
+    notify("Board Deleted"); 
+    setIsDeleteModalOpen(false);
+  }
 
 
   return (
@@ -49,7 +60,9 @@ const Header = () => {
           <img src={logo} alt="logo" className="h-10 w-10"/>
           <h3 className="hidden md:inline-block font-bold md:text-4xl">Opus1</h3>
           <div className="flex items-center">
-              <h3 className="truncate max-w-[200px] md:text-2xl text-xl font-blod  ml-3 md:ml-20 font-sans">{activeBoard.name}</h3>
+              <h3 className="truncate max-w-[200px] md:text-2xl text-xl font-blod  ml-3 md:ml-20 font-sans">
+                {boards?.length > 0 ? activeBoard.name : "No Board available"}
+              </h3>
               <img 
                 src={isDropDownOpen ? iconUp: iconDown} 
                 alt="dropdown icon"
@@ -62,7 +75,7 @@ const Header = () => {
 
         {/* Right Side */}
         {
-          !isDropDownOpen && (
+          !isDropDownOpen && boards?.length > 0 && (
             <div className="flex items-center md:space-x-6">
               {/* Serach box */}
               <form className="flex items-center  md:space-x-5 md:p-1 bg-white rounded-md  shadow-md flex-1 md:flex-initial">
@@ -87,12 +100,35 @@ const Header = () => {
       {isDropDownOpen && <HeaderDropdown 
         setIsDropDownOpen={setIsDropDownOpen}
         setIsAddBoardModalOpen={setIsAddBoardModalOpen}
+        isElipsisMenuOpen={isElipsisMenuOpen}
+        setIsElipsisMenuOpen={setIsElipsisMenuOpen}
+        setIsEditBoardModalOpen={setIsEditBoardModalOpen}
+        isEditBoardModalOpen={isEditBoardModalOpen}
+        setIsDeleteModalOpen={setIsDeleteModalOpen}
+
       />}
 
       {/* Show Add new Board Modal */}
       {isDropDownOpen && isAddBoardModalOpen && <AddBoardModal
         setIsAddBoardModalOpen={setIsAddBoardModalOpen}
-      /> }
+      />}
+    
+      {/* Show Edit Board Modal */}
+      {isDropDownOpen && isEditBoardModalOpen && <EditBoardModal
+        setIsEditBoardModalOpen={setIsEditBoardModalOpen}
+        setIsElipsisMenuOpen={setIsElipsisMenuOpen}
+      />}
+
+      {/* Show Delete Boad Modal */}
+      {
+        isDropDownOpen && isDeleteModalOpen && <DeleteBoardModal
+          title={activeBoard.name}
+          type="board"
+          setIsDeleteModalOpen={setIsDeleteModalOpen}
+          setIsElipsisMenuOpen={setIsElipsisMenuOpen}
+          onDeleteBtnClick={deleteBoard}
+        />
+      }
     </div>
   )
 }

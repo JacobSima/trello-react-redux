@@ -31,13 +31,17 @@ const boardSlice = createSlice({
      * @param {*} action 
      * @returns {state} 
      */
-    setActiveBoard: (state, action) => {
+    setActiveBoard: (state) => {
       state = cloneDeep(state);
       const anyActiveBoard = state.boards?.some(board => board.isActive);
-      state.activeBoard =  anyActiveBoard
+      if(state.boards?.length > 0){
+        state.activeBoard =  anyActiveBoard
         ? state.boards?.find(board => board?.isActive)
         : state.activeBoard = state.boards?.[0];
-      state.activeBoard.isActive = true;
+        state.activeBoard.isActive = true;
+      }else{
+        state.activeBoard = {}
+      }
       return state;
     },
 
@@ -74,7 +78,21 @@ const boardSlice = createSlice({
 
       state.boards.push(board);
       return state;
-    }
+    },
+
+    editBoard: (state, action) => {
+      const payload = action.payload;
+      const board = state.boards.find(board => board.isActive);
+      board.name = payload.name;
+      board.columns = payload.newColumns;
+      return state;
+    },
+
+    deleteBoard: (state) => {
+      const board = state.boards?.find(board => board.isActive);
+      state.boards?.splice(state.boards?.indexOf(board), 1);
+      return state;
+    },
   }
 })
 

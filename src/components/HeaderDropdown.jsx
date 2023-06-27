@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import boardSlice from '../redux/boardSlice'; 
 import { useDispatch, useSelector } from 'react-redux';
 import boardIcon from '../assets/icon-board.svg';
 import elipsis from '../assets/icon-vertical-ellipsis.svg'
+import ElipsisMenu from './ElipsisMenu';
 
-const HeaderDropdown = ({setIsDropDownOpen, setIsAddBoardModalOpen}) => {
+const HeaderDropdown = ({
+  setIsDropDownOpen,
+  setIsAddBoardModalOpen,
+  isElipsisMenuOpen,
+  setIsElipsisMenuOpen,
+  setIsEditBoardModalOpen,
+  setIsDeleteModalOpen
+}) => {
 
   const dispatch = useDispatch();
 
@@ -12,14 +20,22 @@ const HeaderDropdown = ({setIsDropDownOpen, setIsAddBoardModalOpen}) => {
   const boards = useSelector(state => state.boardsData.boards);
 
   // Local state
+
+
   const handleCloseDropwdown = e => {
-    if(e.target !== e.currentTarget) return;
+    if(e.target !== e.currentTarget){
+
+      return;
+    } 
     setIsDropDownOpen(false);
+    setIsElipsisMenuOpen(false);
   }
 
   const updateActiveBoard = index => {
     dispatch(boardSlice.actions.updateActiveBoard(index));
-    dispatch(boardSlice.actions.setActiveBoard(index));
+    dispatch(boardSlice.actions.setActiveBoard());
+    notify("Board Updated");
+    setIsElipsisMenuOpen(false);
   }
 
   return (
@@ -39,18 +55,17 @@ const HeaderDropdown = ({setIsDropDownOpen, setIsAddBoardModalOpen}) => {
           <div className="flex space-x-4 items-center mb-8 mr-4">
             <button 
               className="button py-1 px-3 md:hidden"
-              onClick={() => setIsAddBoardModalOpen(true)}
+              onClick={() =>{
+                setIsAddBoardModalOpen(true)
+                setIsElipsisMenuOpen(false);
+              }}
             >
               +
             </button>
             <img 
               src={elipsis} alt="elipsis" 
               className="cursor-pointer h-6"
-              onClick={() => {
-                // setBoardType("edit");
-                // setOpenDropdown(false)
-                // setIsElipsisMenuOpen((prevState) => !prevState);
-              }}
+              onClick={() => setIsElipsisMenuOpen(prevState => !prevState)}
             />
           </div>
         </div>
@@ -72,6 +87,14 @@ const HeaderDropdown = ({setIsDropDownOpen, setIsAddBoardModalOpen}) => {
             ))
           }
         </div>
+        {
+          isElipsisMenuOpen && (
+            <ElipsisMenu
+              setIsEditBoardModalOpen={setIsEditBoardModalOpen}
+              setIsDeleteModalOpen={setIsDeleteModalOpen}
+            />
+          )
+        }
       </div>
     </div>
   )
