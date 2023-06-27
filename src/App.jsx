@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import Header from './components/Header'
 import boardSlice from './redux/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { ToastContainer , toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
 
@@ -14,15 +16,21 @@ const App = () => {
     dispatch(boardSlice.actions.setActiveBoard());
   }, [])
 
+  const notify = () => toast("Wow so easy !");
+
   return (
-    <div className="overflow-hidden overflow-x-scroll">
+    <>
+      <div className="overflow-hidden overflow-x-scroll">
 
         <>
           {/* Header Section  */}
           <Header />
         </> 
-        
-    </div>
+        <ToastContainer />
+      </div>
+
+    </>
+    
   )
 }
 

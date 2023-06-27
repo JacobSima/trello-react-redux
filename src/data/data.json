@@ -4,7 +4,7 @@
       "name": "Platform Launch",
       "id": "1fb42b99-7382-4f75-9a94-9a7e69a92921",
       "pos": 0,
-      "isActive" : true,
+      "isActive" : false,
       "columns": [
         {
           "name": "Todo",

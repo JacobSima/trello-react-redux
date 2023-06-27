@@ -24,13 +24,6 @@ const boardSlice = createSlice({
   initialState: initState,
   reducers: {
     // write all the reducers action here
-    /**
-     * addBoard: (state, action) => {
-     *   const payload = action.payload;
-     *   board.columns = payload.newColumns;
-     *   state.push(board);
-     * }
-     */
 
     /**
      * Action to set Active Board on the Page, during initialization of when switching boards
@@ -40,21 +33,48 @@ const boardSlice = createSlice({
      */
     setActiveBoard: (state, action) => {
       state = cloneDeep(state);
-      state.activeBoard = state.boards?.find(board => board?.isActive) || {};
+      const anyActiveBoard = state.boards?.some(board => board.isActive);
+      state.activeBoard =  anyActiveBoard
+        ? state.boards?.find(board => board?.isActive)
+        : state.activeBoard = state.boards?.[0];
+      state.activeBoard.isActive = true;
       return state;
     },
 
     /**
-     * Action to reset the search string 
+     * Action to set Active Board on the Page, during initialization of when switching boards
      * @param {*} state 
      * @param {*} action 
-     * @returns {state}
+     * @returns {state} 
      */
-    // setSearchString: (state, action) => {
-    //   state = cloneDeep(state);
-    //   state.searchString = "";
-    //   return state;
-    // }
+    updateActiveBoard: (state, action) => {
+      state = cloneDeep(state);
+      const payloadIndex = action.payload;
+      state.boards?.map((board, index) => {
+        index === payloadIndex ? (board.isActive = true) : (board.isActive = false);
+        return board;
+      })
+      return state;
+    },
+
+    addBoard: (state, action) => {
+      state = cloneDeep(state);
+      state.boards.map(board =>{
+        board.isActive = false;
+        return board
+      });
+
+      const board = {
+        name: action.payload.name,
+        columns: action.payload.newColumns,
+        isActive: true,
+        id: action.payload.id,
+        pos: action.payload.pos
+      };
+
+      state.boards.push(board);
+      return state;
+    }
   }
 })
 

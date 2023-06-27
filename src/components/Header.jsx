@@ -7,6 +7,8 @@ import Avatar from 'react-avatar';
 import { debounce } from 'lodash';
 import { MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import boardSlice from '../redux/boardSlice';
+import HeaderDropdown from './HeaderDropdown';
+import AddBoardModal from './Modals/AddBoardModal';
 
 const Header = () => {
 
@@ -18,10 +20,11 @@ const Header = () => {
 
 
   // Local state
-  const [isDropDownOpen, setisDropDownOpen] = useState(false);
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const[isAddBoardModalOpen, setIsAddBoardModalOpen] = useState(false);
 
   const onDropDownIconClick = () => {
-    setisDropDownOpen(state => !state);
+    setIsDropDownOpen(state => !state);
   }
 
   const [searchString, setSearchString] =  useState("");
@@ -29,6 +32,8 @@ const Header = () => {
   const setSearchStringLocal = e => {
     debounceSearch((e.target.value));
   }
+
+
 
 
   return (
@@ -56,24 +61,38 @@ const Header = () => {
 
 
         {/* Right Side */}
-        <div className="flex space-x-4 items-center md:space-x-6">
-          {/* Serach box */}
-          <form className="flex items-center space-x-5 bg-white rounded-md p-1 shadow-md flex-1 md:flex-initial">
-              <MagnifyingGlassIcon className="h-6 w-6 text-gray-400"/>
-              <input 
-                type="text" 
-                placeholder="Search" 
-                value={searchString}
-                onChange={setSearchStringLocal}
-                className="flex-1 outline-none p-2"/>
-              <button hidden type="submit">Search</button>
-            </form>
-            {/* Avatar */}
-            <Avatar name="Jacob Sima" round size="50" className="cprimary"/>
-        </div>
-
+        {
+          !isDropDownOpen && (
+            <div className="flex items-center md:space-x-6">
+              {/* Serach box */}
+              <form className="flex items-center  md:space-x-5 md:p-1 bg-white rounded-md  shadow-md flex-1 md:flex-initial">
+                  <MagnifyingGlassIcon className="h-4 w-4 md:h-6 md:w-6 text-gray-400"/>
+                  <input 
+                    type="text" 
+                    placeholder="Search" 
+                    value={searchString}
+                    onChange={setSearchStringLocal}
+                    className="flex-1 outline-none p-2 md:p-2"/>
+                  <button hidden type="submit">Search</button>
+                </form>
+                {/* Avatar */}
+                <Avatar name="Jacob Sima" round size="50" className="cprimary hidden md:block"/>
+            </div>
+          )
+        }
+        
       </header>
-      
+
+      {/* Dropwsown Menu for small screen */}
+      {isDropDownOpen && <HeaderDropdown 
+        setIsDropDownOpen={setIsDropDownOpen}
+        setIsAddBoardModalOpen={setIsAddBoardModalOpen}
+      />}
+
+      {/* Show Add new Board Modal */}
+      {isDropDownOpen && isAddBoardModalOpen && <AddBoardModal
+        setIsAddBoardModalOpen={setIsAddBoardModalOpen}
+      /> }
     </div>
   )
 }
