@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AddBoardModal from "./Modals/AddBoardModal";
 
-const EmptyBoard = ({ type }) =>  {
+const EmptyBoard = ({}) =>  {
   const [isBoardModalOpen, setBoardModalOpen] = useState(false);
   return (
     <div className=" bg-white dark:bg-[#2b2c37] h-screen w-screen flex flex-col  items-center justify-center">

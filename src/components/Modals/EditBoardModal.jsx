@@ -50,7 +50,7 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen}) => {
   };
 
   useEffect(() => {
-    setIsElipsisMenuOpen(false);
+    setIsElipsisMenuOpen && setIsElipsisMenuOpen(false);
     setNewColumns(
       columns.map(col => {
         return {...col}

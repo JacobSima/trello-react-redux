@@ -34,13 +34,12 @@ const HeaderDropdown = ({
   const updateActiveBoard = index => {
     dispatch(boardSlice.actions.updateActiveBoard(index));
     dispatch(boardSlice.actions.setActiveBoard());
-    notify("Board Updated");
     setIsElipsisMenuOpen(false);
   }
 
   return (
     <div
-      className="py-10 px-6 absolute left-0 right-0 bottom-[-100vh] top-16 bg-[#00000086]"  
+      className="py-10 px-6 absolute left-0 right-0 bottom-[-100vh] top-16 bg-[#00000086] md:hidden"  
       onClick={handleCloseDropwdown}
     >
       

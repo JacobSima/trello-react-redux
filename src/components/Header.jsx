@@ -47,25 +47,6 @@ const Header = () => {
     setIsDeleteModalOpen(false);
   }
 
-  useEffect(() => {
-
-    dispatch(boardSlice.actions.setActiveBoard());
-
-    const handleWindowResize = () => {
-      setWindowSize([window.innerWidth, window.innerHeight])
-    }
-    window.addEventListener('resize',handleWindowResize);
-
-    if(windowSize[0] >= 768 && isDropDownOpen){
-      setIsDropDownOpen(false);
-    }
-
-    return () => {
-      window.removeEventListener('resize', handleWindowResize)
-    }
-  }, [windowSize[0]])
-
-
   return (
     <div 
       className="p-4 fixed left-0 bg-white dark:bg-[#2b2c37] z-50 right-0"
@@ -130,6 +111,7 @@ const Header = () => {
       {/* Show Add new Board Modal */}
       {isDropDownOpen && isAddBoardModalOpen && <AddBoardModal
         setIsAddBoardModalOpen={setIsAddBoardModalOpen}
+        isDropdown={true}
       />}
     
       {/* Show Edit Board Modal */}

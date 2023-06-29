@@ -1,14 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from './components/Header'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Center from './components/Center';
 import EmptyBoard from './components/EmptyBoard';
+import boardSlice from './redux/boardSlice';
 
 const App = () => {
 
+  const dispatch = useDispatch();
   const boards = useSelector(state => state.boardsData.boards)
+
+  useEffect(() => {
+    dispatch(boardSlice.actions.setActiveBoard());
+  }, [])
 
   return (
     <>
