@@ -13,28 +13,21 @@ body {
 
 @layer components {
   .button {
-    @apply bg-[#635fc7] py-2 px-4 rounded-full text-white text-lg font-semibold hover:opacity-80 duration-200 
+    @apply bg-[#BB5450] py-2 px-4 rounded-full text-white text-lg font-semibold hover:opacity-80 duration-200 
   }
 }
 /* overflow-y-scroll scrollbar-hide hover:scrollbar-auto  */
 @layer utilities {
   .custom-scrollbar{
-    overflow: hidden;
-  }
-  .custom-scrollbar:hover {
+    overflow-x: hidden;
     overflow-y: auto;
   }
   .custom-scrollbar::-webkit-scrollbar {
     background: transparent;
-    width: 10px;
   }
-
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: lightgray;
-    border-radius: 10px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-corner{
-    border-radius: 10px;
+    background: none;
+
   }
 }
 

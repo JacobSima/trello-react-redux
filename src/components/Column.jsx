@@ -10,7 +10,7 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
 
   return (
     <div
-      className="scrollbar-hide   mx-5 pt-[90px] min-w-[280px] "
+      className="custom-scrollbar mt-[90px] min-w-[280px] ml-2"
     >
       {/* Column Header */}
       <div className="flex  justify-between items-center bg-[#c1cde7] font-bold font-sans rounded-md 
@@ -39,18 +39,21 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
           />
         </div>
       </div>
+      <div>
+        {/* Render Task */}
+        {col?.tasks?.map((task, index) => (
+          <Task 
+            key={index} 
+            taskIndex={index} 
+            colIndex={colIndex} 
+            task={task}
+            col={col}
+            setIsEditTaskModalOpen={setIsEditTaskModalOpen}
+            />
+        ))}
+      </div>
 
-      {/* Render Task */}
-      {col?.tasks?.map((task, index) => (
-        <Task 
-          key={index} 
-          taskIndex={index} 
-          colIndex={colIndex} 
-          task={task}
-          col={col}
-          setIsEditTaskModalOpen={setIsEditTaskModalOpen}
-          />
-      ))}
+      
 
     </div>
   )

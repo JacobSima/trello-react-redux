@@ -65,11 +65,11 @@ const DeleteBoardModal = ({}) => {
         dispatch(boardSlice.actions.setDeleteModal());
       }}
       
-      className="fixed right-0 top-0 px-2 py-4 overflow-scroll scrollbar-hide bg-[#00000086] bottom-0  z-50 left-0 justify-center items-center flex dropdown"
+      className="fixed right-0 top-0 px-2 py-4 custom-scrollbar bg-[#00000086] bottom-0  z-50 left-0 justify-center items-center flex dropdown"
     >
       {/* Delete Modal  */}
 
-      <div className=" scrollbar-hide overflow-y-scroll max-h-[95vh]  my-auto  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold shadow-md shadow-[#364e7e1a] max-w-md mx-auto  w-full px-8  py-8 rounded-xl ">
+      <div className=" custom-scrollbar max-h-[95vh]  my-auto  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold shadow-md shadow-[#364e7e1a] max-w-md mx-auto  w-full px-8  py-8 rounded-xl ">
         <h3 className=" font-bold text-red-500 text-xl  ">
           {/* Delete this {type}? */}
         </h3>

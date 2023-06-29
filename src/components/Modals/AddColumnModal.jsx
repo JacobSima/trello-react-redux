@@ -50,7 +50,7 @@ const AddColumnModal = ({setIsAddColumnModalOpen}) => {
 
         {/* Modal Section */}
         <div
-        className=" overflow-y-scroll max-h-[85vh]  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold
+        className=" custom-scrollbar max-h-[85vh]  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold
         shadow-md shadow-[#364e7e1a] max-w-md mx-auto my-auto w-full px-8  py-8 rounded-xl"
         >
           <h3 className="text-lg">Add New Column</h3>
@@ -73,13 +73,13 @@ const AddColumnModal = ({setIsAddColumnModalOpen}) => {
           <div>
             <button
               onClick={() => onSubmit()}
-              className=" w-full items-center hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative  text-white bg-[#635fc7] py-2 rounded-full"
+              className=" w-full items-center hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative  text-white bg-[#BB5450] py-2 rounded-full"
             >
               Create New Column
             </button>
             <button
               onClick={() => setIsAddColumnModalOpen(false)}
-              className="mt-4 w-full items-center text-[#635fc7] dark:bg-white hover:opacity-75 bg-[#c657e21a]  py-2 rounded-full"
+              className="mt-4 w-full items-center text-white dark:bg-white hover:opacity-75 bg-[#BB5450]  py-2 rounded-full"
             >
               Cancel
             </button>

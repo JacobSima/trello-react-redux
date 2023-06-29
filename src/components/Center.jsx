@@ -56,8 +56,8 @@ const Center = ({}) => {
   return (
     <div
       className={windowSize[0] >= 768 && isSideBarOpen 
-      ? "bg-[#f4f7fd]  h-screen flex dar:bg-[#20212c] overflow-y-hidden  gap-6 ml-[261px]" 
-      : "bg-[#f4f7fd]  h-screen flex dark:bg-[#20212c] overflow-y-hidden gap-6 "}
+      ? "bg-[#f4f7fd]  h-screen flex dar:bg-[#20212c] overflow-y-hidden  gap-6 ml-[290px] " 
+      : "bg-[#f4f7fd]  h-screen flex dark:bg-[#20212c] overflow-y-hidden gap-6"}
     >
 
       {/* SideBar section */}
@@ -89,9 +89,9 @@ const Center = ({}) => {
             onClick={() => {
               setIsAddColumnModalOpen(true);
             }}
-            className=" h-screen dark:bg-[#2b2c3740] flex justify-center items-center font-bold text-2xl 
+            className=" dark:bg-[#2b2c3740] flex justify-center items-center font-bold text-2xl 
             hover:text-[#635FC7] transition duration-300 cursor-pointer bg-[#E9EFFA] scrollbar-hide mb-2
-            mx-5 pt-[70px] min-w-[280px] text-[#828FA3] mt-[135px] rounded-lg "
+            mx-5  min-w-[280px] text-[#828FA3] mt-[90px] rounded-lg "
           >
             + Add New Column
           </div>

@@ -72,7 +72,7 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdow
         {/* Modal Section */}
         {/* style  */}
         <div
-        className=" overflow-y-scroll max-h-[85vh]  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold
+        className=" custom-scrollbar max-h-[85vh]  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold
         shadow-md shadow-[#364e7e1a] max-w-md mx-auto my-auto w-full px-8  py-8 rounded-xl"
         >
           <h3 className="text-lg">Edit Board</h3>
@@ -116,7 +116,7 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdow
             {/* Add new Column */}
             <div>
               <button
-                className=" w-full items-center hover:opacity-70 dark:text-[#635fc7] dark:bg-white  text-white bg-[#635fc7] py-2 rounded-full "
+                className=" w-full items-center hover:opacity-70 dark:text-[#635fc7] dark:bg-white  text-white bg-[#BB5450] py-2 rounded-full "
                 onClick={() => {
                   setNewColumns(state => [
                     ...state,
@@ -128,7 +128,7 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdow
               </button>
               <button
                 onClick={() => onSubmit()}
-                className=" w-full items-center hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative  text-white bg-[#635fc7] py-2 rounded-full"
+                className=" w-full items-center hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative  text-white bg-[#BB5450] py-2 rounded-full"
               >
                 Save Changes
               </button>

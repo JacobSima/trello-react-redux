@@ -67,7 +67,7 @@ const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
     >
       {/* Add Task Modal Section */}
       <div
-        className=" scrollbar-hide overflow-y-scroll max-h-[80vh]  my-auto  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold
+        className=" custom-scrollbar max-h-[80vh]  my-auto  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold
         shadow-md shadow-[#364e7e1a] max-w-md mx-auto  w-full px-8  py-8 rounded-xl"
       >
         <h3 className="text-lg">Add New Task</h3>
@@ -132,7 +132,7 @@ const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
           ))}
 
           <button
-            className=" w-full items-center dark:text-[#635fc7] dark:bg-white  text-white bg-[#635fc7] py-2 rounded-full "
+            className=" w-full items-center dark:text-[#635fc7] dark:bg-white  text-white bg-[#BB5450] py-2 rounded-full "
             onClick={() => {
               setSubtasks((state) => [
                 ...state,
@@ -148,7 +148,7 @@ const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
         <div className="mt-4 flex flex-col space-y-3">
           <button
             onClick={onSubmit}
-            className=" w-full items-center text-white bg-[#635fc7] py-2 rounded-full "
+            className=" w-full items-center text-white bg-[#BB5450] py-2 rounded-full "
           >
            Create task
           </button>
