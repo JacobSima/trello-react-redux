@@ -5,16 +5,19 @@ import showSidebarIcon from "../assets/icon-show-sidebar.svg";
 import hideSidebarIcon from "../assets/icon-hide-sidebar.svg";
 import elipsis from '../assets/icon-vertical-ellipsis.svg'
 import boardSlice from '../redux/boardSlice';
+import ElipsisMenu from "./ElipsisMenu";
 
 
 const Sidebar = ({ 
   isSideBarOpen, 
   setIsSideBarOpen,
   setIsAddBoardModalOpen,
-
+  setIsElipsisMenuOpen,
+  isElipsisMenuOpen,
+  setIsEditBoardModalOpen,
+  setIsDeleteModalOpen,
 }) => { 
   const dispatch = useDispatch();
-  const [isBoardModalOpen, setIsBoardModalOpen] = useState(false);
 
   const boards = useSelector(state => state.boardsData.boards);
 
@@ -50,7 +53,7 @@ const Sidebar = ({
 
                 <div className="flex space-x-4 items-center mb-8 mr-4">
                   <button 
-                    className="button py-1 px-3"
+                    className="button py-1 px-3  cursor-pointer"
                     onClick={() =>{
                       setIsAddBoardModalOpen(true);
                     }}
@@ -59,8 +62,8 @@ const Sidebar = ({
                   </button>
                   <img 
                     src={elipsis} alt="elipsis" 
-                    className="cursor-pointer h-6"
-                    // onClick={() => setIsElipsisMenuOpen(prevState => !prevState)}
+                    className="cursor-pointer  h-6"
+                    onClick={() => setIsElipsisMenuOpen(true)}
                   />
                 </div>
               </div>
@@ -76,11 +79,17 @@ const Sidebar = ({
                       key={index}
                       onClick={() => updateActiveBoard(index)}
                     >
-                      <img src={boardIcon} className="  filter-white  h-4 " />{" "}
+                      <img src={boardIcon} className="  filter-white  h-4" />
                       <p className=" text-lg font-bold ">{board.name}</p>
                     </div>
                   ))}
                 </div>
+                {isElipsisMenuOpen && (
+                  <ElipsisMenu
+                    setIsEditBoardModalOpen={setIsEditBoardModalOpen}
+                    setIsDeleteModalOpen={setIsDeleteModalOpen}
+                  />
+                )}
 
               </div>
             </div>

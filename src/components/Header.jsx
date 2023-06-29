@@ -118,6 +118,7 @@ const Header = () => {
       {isDropDownOpen && isEditBoardModalOpen && <EditBoardModal
         setIsEditBoardModalOpen={setIsEditBoardModalOpen}
         setIsElipsisMenuOpen={setIsElipsisMenuOpen}
+        isDropdown={true}
       />}
 
       {/* Show Delete Boad Modal */}
@@ -128,6 +129,7 @@ const Header = () => {
           setIsDeleteModalOpen={setIsDeleteModalOpen}
           setIsElipsisMenuOpen={setIsElipsisMenuOpen}
           onDeleteBtnClick={deleteBoard}
+          isDropdown={true}
         />
       }
     </div>

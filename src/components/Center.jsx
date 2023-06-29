@@ -10,6 +10,8 @@ import AddColumnModal from './Modals/AddColumnModal';
 import AddBoardModal from './Modals/AddBoardModal';
 import EditBoardModal from './Modals/EditBoardModal';
 import DeleteBoardModal from './Modals/DeleteBoardModal';
+import notify from '../utils/notify';
+import boardSlice from '../redux/boardSlice';
 
 const Center = ({}) => {
 
@@ -24,11 +26,13 @@ const Center = ({}) => {
   const [isAddColumnModalOpen, setIsAddColumnModalOpen] = useState(false);
 
   const[isAddBoardModalOpen, setIsAddBoardModalOpen] = useState();
+  const [isElipsisMenuOpen, setIsElipsisMenuOpen] = useState(false);
   const[isEditBoardModalOpen, setIsEditBoardModalOpen] = useState();
+  const[isDeleteModalOpen, setIsDeleteModalOpen] = useState();
 
   // Global state
   const activeBoard = useSelector(state => state.boardsData.activeBoard);
-  const isDeleteModalOpen = useSelector(state => state.boardsData.isDeleteModalOpen);
+  const isDeleteModalOpenTaskOrColumn = useSelector(state => state.boardsData.isDeleteModalOpen);
   const columns = activeBoard.columns;
 
   useEffect(() => {
@@ -41,6 +45,13 @@ const Center = ({}) => {
       window.removeEventListener('resize', handleWindowResize)
     }
   }, []);
+
+  const deleteBoard = () => {
+    dispatch(boardSlice.actions.deleteBoard({id : activeBoard?.id}));
+    dispatch(boardSlice.actions.setActiveBoard());
+    notify("Board Deleted"); 
+    setIsDeleteModalOpen(false);
+  }
 
   return (
     <div
@@ -55,6 +66,10 @@ const Center = ({}) => {
           setIsSideBarOpen={setIsSideBarOpen}
           isSideBarOpen={isSideBarOpen}
           setIsAddBoardModalOpen={setIsAddBoardModalOpen}
+          setIsElipsisMenuOpen={setIsElipsisMenuOpen}
+          isElipsisMenuOpen={isElipsisMenuOpen}
+          setIsEditBoardModalOpen={setIsEditBoardModalOpen}
+          setIsDeleteModalOpen={setIsDeleteModalOpen}
         />
       )}
       
@@ -94,7 +109,7 @@ const Center = ({}) => {
 
       {isEditTaskModalOpen && <EditTaskModal setIsEditTaskModalOpen={setIsEditTaskModalOpen}/>}
 
-      {isDeleteModalOpen && <DeletingModal />}
+      {isDeleteModalOpenTaskOrColumn && <DeletingModal />}
 
       {isAddColumnModalOpen && (
         <AddColumnModal setIsAddColumnModalOpen={setIsAddColumnModalOpen}/>
@@ -105,6 +120,25 @@ const Center = ({}) => {
         setIsAddBoardModalOpen={setIsAddBoardModalOpen}
         isDropdown={false}
       />}
+
+      {/* Show Edit Board Modal */}
+      {isEditBoardModalOpen && <EditBoardModal
+        setIsEditBoardModalOpen={setIsEditBoardModalOpen}
+        setIsElipsisMenuOpen={setIsElipsisMenuOpen}
+        isDropdown={false}
+      />}
+
+      {/* Show Delete Boad Modal */}
+      {
+        isDeleteModalOpen && <DeleteBoardModal
+          title={activeBoard.name}
+          type="board"
+          setIsDeleteModalOpen={setIsDeleteModalOpen}
+          setIsElipsisMenuOpen={setIsElipsisMenuOpen}
+          onDeleteBtnClick={deleteBoard}
+          isDropdown={true}
+        />
+      }
 
     </div>
   )

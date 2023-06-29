@@ -6,7 +6,7 @@ import notify from '../../utils/notify';
 import boardSlice from '../../redux/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen}) => {
+const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdown}) => {
 
   const dispatch = useDispatch();
 
@@ -61,7 +61,7 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen}) => {
 
   return (
     <div
-      className="py-10 px-6 absolute left-0 right-0 bottom-[-100vh] top-16 bg-[#00000086]"
+      className={`py-10 px-6 absolute left-0 right-0 ${isDropdown ? "bottom-[-100vh]" : "bottom-[-2vh]" }  top-16 bg-[#00000086]`}
       onClick={e => {
         if(e.target !== e.currentTarget) return;
         setIsEditBoardModalOpen(false);
