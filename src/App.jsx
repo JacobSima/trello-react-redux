@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <>
-      <div className="overflow-hidden overflow-x-scroll">
+      <div className="overflow-hidden">
        {
         boards?.length > 0
         ? (
