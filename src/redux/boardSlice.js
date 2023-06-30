@@ -11,6 +11,9 @@ const initState = {
   columnToDelete: {},
   searchString: "",
 
+  // Drag and Drop
+  dragOverTask: {},
+
 
   // General Modal open/close status
 }
@@ -217,7 +220,65 @@ const boardSlice = createSlice({
       state = cloneDeep(state);
       state.searchString = action.payload.searchString;
       return state;
-    }
+    },
+
+
+
+    // Drag and drop
+    // 1. task
+    setDragOverTask: (state, action) => {
+      state = cloneDeep(state);
+      state.dragOverTask = action.payload.task
+      return state;
+    },
+    
+    resetDragOverTask: (state) => {
+      state = cloneDeep(state);
+      state.dragOverTask = {}
+      return state;
+    },
+
+    removedDraggedTaskFromPreviousColumn: (state, action) => {
+      state = cloneDeep(state);
+      const taskId = action.payload.taskId;
+      const colId = action.payload.colId;
+
+      const board = state.boards?.find(board => board.isActive);
+      const column = board.columns?.find(col => col?.id === colId);
+      column.tasks =  column?.tasks?.filter(task => task.id !== taskId);
+      column?.tasks?.forEach((task, index) => task.pos = index);
+
+      state.activeBoard = board; // update board
+      return state;
+    },
+
+    pushNewDraggedTask: (state, action) => {
+      state = cloneDeep(state);
+      const task = action.payload.draggedTask;
+      const colId = action.payload.colId;
+
+      const board = state.boards?.find(board => board.id === state.activeBoard.id);
+      const column = board.columns?.find(col => col?.id === colId)
+      column.tasks.push(task);
+
+      state.activeBoard = board; // update board
+      return state; 
+    },
+
+    insertDraggedTask: (state, action) => {
+      state = cloneDeep(state);
+      const task = action.payload.draggedTask;
+      const colId = action.payload.colId;
+      const pos = action.payload.pos + 1;
+
+      const board = state.boards?.find(board => board.id === state.activeBoard.id);
+      const column = board.columns?.find(col => col?.id === colId)
+      column?.tasks?.splice(pos, 0, task);
+      column?.tasks?.forEach((task, index) => task.pos = index); // update position
+
+      state.activeBoard = board; // update board
+      return state; 
+    },
   }
 })
 

@@ -24,3 +24,10 @@ export const isStringArrayValide = data => {
   }
   return true;
 }
+
+/**
+ * Check if an Object is empty, null or undefined
+ * @param {Object} obj 
+ * @returns {bool} true/false
+ */
+export const isObjectEmpty = obj => obj === null || obj === undefined || Object.keys(obj)?.length === 0;

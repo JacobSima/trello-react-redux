@@ -29,6 +29,10 @@ body {
     background: none;
 
   }
+
+  .dragging {
+    opacity: 0.5;
+  }
 }
 
 .select-status{
