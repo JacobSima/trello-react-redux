@@ -9,7 +9,6 @@ const initState = {
   editTask: {},
   isDeleteModalOpen: false,
   columnToDelete: {},
-
   searchString: "",
 
 
@@ -39,6 +38,8 @@ const boardSlice = createSlice({
       }else{
         state.activeBoard = {}
       }
+
+      state.searchString = "";
       return state;
     },
 
@@ -74,6 +75,7 @@ const boardSlice = createSlice({
       };
 
       state.boards.push(board);
+      state.searchString = "";
       return state;
     },
 
@@ -81,6 +83,8 @@ const boardSlice = createSlice({
       state = cloneDeep(state);
       const board = state.boards?.find(board => board.isActive);
       board.columns.push(action.payload.column);
+
+      state.searchString = "";
       return state;
     },
 
@@ -90,6 +94,8 @@ const boardSlice = createSlice({
       const board = state.boards.find(board => board.isActive);
       board.name = payload.name;
       board.columns = payload.newColumns;
+
+      state.searchString = "";
       return state;
     },
 
@@ -97,6 +103,8 @@ const boardSlice = createSlice({
       state = cloneDeep(state);
       const board = state.boards?.find(board => board.isActive);
       state.boards?.splice(state.boards?.indexOf(board), 1);
+
+      state.searchString = "";
       return state;
     },
 
@@ -104,6 +112,8 @@ const boardSlice = createSlice({
       state = cloneDeep(state);
       const board = state.boards?.find(board => board.isActive);
       board.columns = board?.columns?.filter(col => col.id !== state.columnToDelete.id);
+
+      state.searchString = "";
       return state;
     },
 
@@ -128,6 +138,8 @@ const boardSlice = createSlice({
       const column = board.columns?.find(col => col?.id === addOrEditColumn.id)
       column.tasks.push(task);
       state.addOrEditColumn = {};
+
+      state.searchString = "";
       return state; 
     },
 
@@ -136,7 +148,7 @@ const boardSlice = createSlice({
       let addOrEditColumn = state.addOrEditColumn;
       const newTask = action.payload.task;
 
-      const board = state.boards?.find(board => board.id = state.activeBoard.id);
+      const board = state.boards?.find(board => board.id === state.activeBoard.id);
       const column = board.columns?.find(col => col?.id === addOrEditColumn.id);
       let oldTask = column?.tasks?.find(task => task.id === newTask.id);
       newTask.pos = oldTask.pos;
@@ -144,6 +156,8 @@ const boardSlice = createSlice({
       column?.tasks?.splice(oldTask.pos, 1, newTask);
       state.addOrEditColumn = {};
       state.editTask = {};
+
+      state.searchString = "";
       return state;
     },
 
@@ -151,12 +165,14 @@ const boardSlice = createSlice({
       state = cloneDeep(state);
       const task = action.payload.task;
       let addOrEditColumn = state.addOrEditColumn;
-      const board = state.boards?.find(board => board.id = state.activeBoard.id);
+      const board = state.boards?.find(board => board.id === state.activeBoard.id);
       const column = board.columns?.find(col => col?.id === addOrEditColumn.id);
       column.tasks = column.tasks.filter(t => t.id !== task.id);
 
       state.addOrEditColumn = {};
       state.editTask = {};
+
+      state.searchString = "";
       return state;
     },
 
@@ -166,10 +182,12 @@ const boardSlice = createSlice({
       const newColId = action.payload.newColId;
 
       // Add task into new column
-      const board = state.boards?.find(board => board.id = state.activeBoard.id);
+      const board = state.boards?.find(board => board.id === state.activeBoard.id);
       const newColumn = board.columns?.find(col => col?.id === newColId);
       newTask.pos = newColumn.tasks.length;
       newColumn.tasks.push(newTask);
+
+      state.searchString = "";
       return state;
     },
 
@@ -193,7 +211,13 @@ const boardSlice = createSlice({
       state = cloneDeep(state);
       state.isDeleteModalOpen = !state.isDeleteModalOpen;
       return state;
-    } 
+    },
+
+    searchString: (state, action) => {
+      state = cloneDeep(state);
+      state.searchString = action.payload.searchString;
+      return state;
+    }
   }
 })
 

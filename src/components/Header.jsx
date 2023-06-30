@@ -4,7 +4,7 @@ import iconDown from '../assets/icon-chevron-down.svg';
 import iconUp from '../assets/icon-chevron-up.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from 'react-avatar';
-import { debounce } from 'lodash';
+import { cloneDeep, debounce } from 'lodash';
 import { MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import boardSlice from '../redux/boardSlice';
 import HeaderDropdown from './HeaderDropdown';
@@ -20,7 +20,7 @@ const Header = () => {
   // Global state
   const boards = useSelector(state => state.boardsData.boards)
   const activeBoard = useSelector(state => state.boardsData.activeBoard);
-
+  const searchString = cloneDeep(useSelector(state => state.boardsData.searchString));
 
   // Local state
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
@@ -28,14 +28,16 @@ const Header = () => {
   const[isEditBoardModalOpen, setIsEditBoardModalOpen] = useState(false);
   const [isElipsisMenuOpen, setIsElipsisMenuOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [windowSize, setWindowSize] = useState([window.innerWidth,window.innerHeight]);
 
   const onDropDownIconClick = () => {
     setIsDropDownOpen(state => !state);
   }
 
-  const [searchString, setSearchString] =  useState("");
+  const setSearchString = searchString => {
+    dispatch(boardSlice.actions.searchString({searchString}));
+  }
   const debounceSearch = useCallback(debounce(setSearchString, 200), []);
+
   const setSearchStringLocal = e => {
     debounceSearch((e.target.value));
   }
