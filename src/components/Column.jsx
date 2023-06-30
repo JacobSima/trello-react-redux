@@ -76,7 +76,7 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
       onDrop={handleOnDrop}
       onDragOver={hanldeOnDragOver}
       on
-      className="custom-scrollbar mt-[90px] min-w-[280px] ml-2 cursor-move"
+      className="custom-scrollbar mt-[90px] min-w-[280px] ml-2"
       draggable
     >
       {/* Column Header */}
