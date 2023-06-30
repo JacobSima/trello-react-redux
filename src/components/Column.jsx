@@ -11,7 +11,6 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
   const dispatch = useDispatch();
 
   const activeBoard = useSelector(state => state.boardsData.activeBoard);
-  const colums = activeBoard.colums;
 
   const searchString = cloneDeep(useSelector(state => state.boardsData.searchString));
   const [tasks, setTasks] = useState(col?.tasks);
@@ -43,7 +42,7 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
 
     // Dropping in the same column
     if(prevCol.id === col.id){
-      // console.log(`same column....`)
+      dispatch(boardSlice.actions.insertDraggedTaskSameColumn({posDragged: draggedTask.pos, colId: col.id, posOver: dragOverTask.pos}))
     }else{
       // Dropping in different column
       // 1. Remove from previous column
@@ -59,17 +58,10 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
         // calculate the actual position to add in the column
         dispatch(boardSlice.actions.insertDraggedTask({draggedTask, colId: col.id, pos: dragOverTask.pos}))
       }
-
-      
-
     }
   }
 
-  const hanldeOnDragOver = e => {
-    e.preventDefault()
-    console.log("over...")
-  }
-
+  const hanldeOnDragOver = e => e.preventDefault();
 
   return (
     <div

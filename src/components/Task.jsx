@@ -53,7 +53,7 @@ const Task = ({taskIndex, colIndex, task, setIsEditTaskModalOpen, col}) => {
       onDragLeave={handleOnDragLeave}
       onClick={e => onClick(e)}
       ondrg
-      className={` ${isDragging && "dragging"} task w-[300px] last:mb-3 first:my-5 rounded-lg  bg-white  dark:bg-[#2b2c37] shadow-[#364e7e1a] 
+      className={` ${isDragging && "dragging"} task w-[300px] last:mb-3 first:mt-5 rounded-lg  bg-white  dark:bg-[#2b2c37] shadow-[#364e7e1a] 
       py-6 px-3 mt-4 shadow-lg hover:text-[#635fc7] dark:text-white dark:hover:text-[#635fc7] cursor-move`}
     >
       <div className='cursor-pointer'>

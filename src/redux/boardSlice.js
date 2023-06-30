@@ -279,6 +279,23 @@ const boardSlice = createSlice({
       state.activeBoard = board; // update board
       return state; 
     },
+    
+    insertDraggedTaskSameColumn: (state, action) => {
+      state = cloneDeep(state);
+      const posDragged = action.payload.posDragged;
+      const colId = action.payload.colId;
+      const posOver = action.payload.posOver + 1;
+
+      const board = state.boards?.find(board => board.id === state.activeBoard.id);
+      const column = board.columns?.find(col => col?.id === colId)
+      const tasks = column?.tasks;
+      const temp = tasks?.splice(posDragged, 1)[0];
+      tasks.splice(posOver, 0, temp)
+
+      column?.tasks?.forEach((task, index) => task.pos = index); // update position
+      state.activeBoard = board; // update board
+      return state; 
+    },
   }
 })
 
