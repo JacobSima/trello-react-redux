@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice , createAsyncThunk} from '@reduxjs/toolkit';
 import data from '../data/data.json';
 import { cloneDeep } from 'lodash';
+
 
 const initState = {
   boards : data.boards,
@@ -17,6 +18,7 @@ const initState = {
 
   // General Modal open/close status
 }
+
 
 const boardSlice = createSlice({
   name: "boardsData",
@@ -296,7 +298,7 @@ const boardSlice = createSlice({
       state.activeBoard = board; // update board
       return state; 
     },
-  }
+  },
 })
 
 export default boardSlice;

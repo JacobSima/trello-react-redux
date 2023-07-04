@@ -6,14 +6,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import Center from './components/Center';
 import EmptyBoard from './components/EmptyBoard';
 import boardSlice from './redux/boardSlice';
+import { getBoards } from './redux/boardSLiceThunk';
 
 const App = () => {
 
   const dispatch = useDispatch();
   const boards = useSelector(state => state.boardsData.boards)
+  const data = {
+    id: '1',
+    name: 'jacob'
+  }
 
   useEffect(() => {
     dispatch(boardSlice.actions.setActiveBoard());
+    dispatch(getBoards(data)) 
   }, [])
 
   return (
