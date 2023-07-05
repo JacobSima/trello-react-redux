@@ -12,7 +12,7 @@ const EmptyBoard = ({}) =>  {
         onClick={() => {
           setBoardModalOpen(true);
         }}
-        className="w-full items-center max-w-xs font-bold hover:opacity-70 dark:text-white dark:bg-[#635fc7] mt-8 relative  text-white bg-[#635fc7] py-2 rounded-full"
+        className="w-full items-center max-w-xs font-bold hover:opacity-70 dark:text-white dark:bg-[#BB5450] mt-8 relative  text-white bg-[#BB5450] py-2 rounded-full"
       >
         + Add New Board
       </button>

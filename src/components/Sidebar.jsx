@@ -6,6 +6,7 @@ import hideSidebarIcon from "../assets/icon-hide-sidebar.svg";
 import elipsis from '../assets/icon-vertical-ellipsis.svg'
 import boardSlice from '../redux/boardSlice';
 import ElipsisMenu from "./ElipsisMenu";
+import { useUpdateActiveBoards } from "../redux/boardSLiceThunk";
 
 
 const Sidebar = ({ 
@@ -25,7 +26,8 @@ const Sidebar = ({
     setIsSideBarOpen(curr => !curr);
   };
 
-  const updateActiveBoard = index => {
+  const updateActiveBoard = (index) => {
+    dispatch(useUpdateActiveBoards(index));
     dispatch(boardSlice.actions.updateActiveBoard(index));
     dispatch(boardSlice.actions.setActiveBoard());
     setIsElipsisMenuOpen(false);

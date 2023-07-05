@@ -1,13 +1,28 @@
 import { createAsyncThunk} from '@reduxjs/toolkit';
 
-export const getBoards = createAsyncThunk('board/getboards', async (data) => {
-  console.log(data)
+
+/**
+ * This is a Thunk to get all Boards data 
+ */
+export const useGetBoards = createAsyncThunk('board/getboards', async () => {
   try {
     const res = await fetch('api/boards');
     const result = await res.json();
-    console.log(result)
     return result
   } catch (err) {
-    // return console.log(err);
+    return console.log(err);
+  }
+})
+
+/**
+ * This is a Thunk to get all Boards data 
+ */
+export const useUpdateActiveBoards = createAsyncThunk('board/updateActiveBoard', async (index) => {
+  try {
+    const res = await fetch(`api/boards/updateactiveboard/${index}`);
+    const result = await res.json();
+    return result
+  } catch (err) {
+    return console.log(err);
   }
 })

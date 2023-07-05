@@ -56,8 +56,8 @@ const Center = ({}) => {
   return (
     <div
       className={windowSize[0] >= 768 && isSideBarOpen 
-      ? "bg-[#f4f7fd]  h-screen flex dar:bg-[#20212c] overflow-y-hidden  gap-6 ml-[290px] " 
-      : "bg-[#f4f7fd]  h-screen flex dark:bg-[#20212c] overflow-y-hidden gap-6"}
+      ? "bg-[#f4f7fd]  h-screen flex dar:bg-[#20212c] overflow-y-hidden  gap-0 ml-[290px] " 
+      : "bg-[#f4f7fd]  h-screen flex dark:bg-[#20212c] overflow-y-hidden gap-0"}
     >
 
       {/* SideBar section */}

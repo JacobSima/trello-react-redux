@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 
 
 const initState = {
-  boards : data.boards,
+  boards : [],
   activeBoard: {},
   addOrEditColumn: {},
   editTask: {},
@@ -25,6 +25,18 @@ const boardSlice = createSlice({
   initialState: initState,
   reducers: {
     // write all the reducers action here
+
+    /**
+     * Initialize board data, from API call to Backend
+     * @param {*} state 
+     * @param {*} action 
+     * @returns state
+     */
+    setBoards: (state, action ) => {
+      state = cloneDeep(state);
+      state.boards = action.payload.boards;
+      return state
+    },
 
     /**
      * Action to set Active Board on the Page, during initialization of when switching boards
