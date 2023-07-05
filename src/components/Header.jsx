@@ -12,6 +12,7 @@ import AddBoardModal from './Modals/AddBoardModal';
 import EditBoardModal from './Modals/EditBoardModal';
 import DeleteBoardModal from './Modals/DeleteBoardModal';
 import notify from '../utils/notify';
+import { useDeleteBoard } from '../redux/boardSLiceThunk';
 
 const Header = () => {
 
@@ -42,11 +43,14 @@ const Header = () => {
     debounceSearch((e.target.value));
   }
 
-  const deleteBoard = () => {
-    dispatch(boardSlice.actions.deleteBoard({id : activeBoard?.id}));
-    dispatch(boardSlice.actions.setActiveBoard());
-    notify("Board Deleted"); 
-    setIsDeleteModalOpen(false);
+  const deleteBoard = async() => { 
+    const response = await dispatch(useDeleteBoard(activeBoard?.id)) 
+    if(response.payload){
+      dispatch(boardSlice.actions.deleteBoard({id : activeBoard?.id}));
+      dispatch(boardSlice.actions.setActiveBoard());
+      notify("Board Deleted"); 
+      setIsDeleteModalOpen(false);
+    }
   }
 
   return (

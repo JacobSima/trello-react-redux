@@ -5,6 +5,7 @@ import { isNullOrUndefinedOrEmpty, isStringArrayValide } from '../../utils/valid
 import notify from '../../utils/notify';
 import boardSlice from '../../redux/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useCreateBoard } from '../../redux/boardSLiceThunk';
 
 const AddBoardModal = ({setIsAddBoardModalOpen, setBoardModalOpen, isDropdown}) => {
 
@@ -34,18 +35,19 @@ const AddBoardModal = ({setIsAddBoardModalOpen, setBoardModalOpen, isDropdown}) 
   };
 
   // Submit Creation
-  const onSubmit = () => {
+  const onSubmit = async() => {
     // run form validation
     const data = newColumns?.map(col => col?.name);
-    const boardIndex = boards.length;
 
     if(isNullOrUndefinedOrEmpty(name) || !isStringArrayValide(data)){
       notify("Form is invalid");
       return;
     }
+    // make call to the back end
+    const response = await dispatch(useCreateBoard({ name, buckets: data}));
 
-    dispatch(boardSlice.actions.addBoard({ name, newColumns, id: uuidv4(), pos: boardIndex }));
-    dispatch(boardSlice.actions.setActiveBoard());
+    // update the reducer
+    dispatch(boardSlice.actions.addBoard({ board: response.payload.board}));
 
     notify("Board Added");
     setIsAddBoardModalOpen && setIsAddBoardModalOpen(false);

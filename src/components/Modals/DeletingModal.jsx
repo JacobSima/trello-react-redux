@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import boardSlice from "../../redux/boardSlice";
 import notify from "../../utils/notify";
+import { useDeleteBucket } from "../../redux/boardSLiceThunk";
 
 const DeleteBoardModal = ({}) => {
    
@@ -42,10 +43,11 @@ const DeleteBoardModal = ({}) => {
     dispatch(boardSlice.actions.genericReset());
   }
 
-  const onDeleteBtnClick = () => {
+  const onDeleteBtnClick = async() => {
 
     if(columnToDelete?.id && !taskToDelete?.id){// Delete Column
       dispatch(boardSlice.actions.deleteColumn());
+      await dispatch(useDeleteBucket(columnToDelete?.id))
       notify("Column Deleted");
     } else if(!columnToDelete?.id && taskToDelete?.id){ // Delete Task
 

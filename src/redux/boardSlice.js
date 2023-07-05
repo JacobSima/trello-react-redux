@@ -83,15 +83,8 @@ const boardSlice = createSlice({
         return board
       });
 
-      const board = {
-        name: action.payload.name,
-        columns: action.payload.newColumns,
-        isActive: true,
-        id: action.payload.id,
-        pos: action.payload.pos
-      };
-
-      state.boards.push(board);
+      state.boards.push(action.payload.board);
+      state.activeBoard = action.payload.board;
       state.searchString = "";
       return state;
     },
@@ -107,11 +100,13 @@ const boardSlice = createSlice({
 
     editBoard: (state, action) => {
       state = cloneDeep(state);
-      const payload = action.payload;
-      const board = state.boards.find(board => board.isActive);
-      board.name = payload.name;
-      board.columns = payload.newColumns;
-
+      const board = action.payload.board;
+      const boards = state.boards;
+      const index = boards.findIndex(b => b.id === board.id)
+      if(index !== -1){
+        state.boards[index] = board;
+      }
+      state.activeBoard = board;
       state.searchString = "";
       return state;
     },

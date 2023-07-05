@@ -10,8 +10,6 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
 
   const dispatch = useDispatch();
 
-  const activeBoard = useSelector(state => state.boardsData.activeBoard);
-
   const searchString = cloneDeep(useSelector(state => state.boardsData.searchString));
   const [tasks, setTasks] = useState(col?.tasks);
 

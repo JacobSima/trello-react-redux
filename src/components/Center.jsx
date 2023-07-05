@@ -12,6 +12,8 @@ import EditBoardModal from './Modals/EditBoardModal';
 import DeleteBoardModal from './Modals/DeleteBoardModal';
 import notify from '../utils/notify';
 import boardSlice from '../redux/boardSlice';
+import { cloneDeep } from 'lodash';
+import { useDeleteBoard } from '../redux/boardSLiceThunk';
 
 const Center = ({}) => {
 
@@ -33,7 +35,7 @@ const Center = ({}) => {
   // Global state
   const activeBoard = useSelector(state => state.boardsData.activeBoard);
   const isDeleteModalOpenTaskOrColumn = useSelector(state => state.boardsData.isDeleteModalOpen);
-  const columns = activeBoard.columns;
+  const columns = cloneDeep(activeBoard.columns);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -46,11 +48,15 @@ const Center = ({}) => {
     }
   }, []);
 
-  const deleteBoard = () => {
-    dispatch(boardSlice.actions.deleteBoard({id : activeBoard?.id}));
-    dispatch(boardSlice.actions.setActiveBoard());
-    notify("Board Deleted"); 
-    setIsDeleteModalOpen(false);
+  const deleteBoard = async() => {
+
+    const response = await dispatch(useDeleteBoard(activeBoard?.id)) 
+    if(response.payload){
+      dispatch(boardSlice.actions.deleteBoard({id : activeBoard?.id}));
+      dispatch(boardSlice.actions.setActiveBoard());
+      notify("Board Deleted"); 
+      setIsDeleteModalOpen(false);
+    }
   }
 
   return (

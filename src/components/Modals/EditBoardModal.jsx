@@ -5,6 +5,7 @@ import { isNullOrUndefinedOrEmpty, isStringArrayValide } from '../../utils/valid
 import notify from '../../utils/notify';
 import boardSlice from '../../redux/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEditBoard } from '../../redux/boardSLiceThunk';
 
 const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdown}) => {
 
@@ -13,6 +14,7 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdow
   // Global state
   const activeBoard = useSelector(state => state.boardsData.activeBoard);
   const columns = activeBoard.columns;
+  const [deletedColumns, setDeletedColumns ]= useState([]);
 
   // Local state
   const [name, setName] = useState("");
@@ -27,12 +29,18 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdow
     });
   };
 
-  const onDelete = id => {
-    setNewColumns((prevState) => prevState.filter((el) => el.id !== id));
+  const onDelete = column => {
+    if(column.existing){
+      const deleted = { id: column.id,name: column.name,deleted: true,updated: false,new: false };
+      setDeletedColumns(prevState => ([...prevState, deleted ]));
+    }
+
+    setNewColumns((prevState) => prevState.filter((el) => el.id !== column?.id));
   };
 
   // Edition of Board
-  const onSubmit = () => {
+  const onSubmit = async() => {
+    let nameChanged;
     // run form validation
     const data = newColumns?.map(col => col?.name);
 
@@ -42,8 +50,32 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdow
       return;
     }
 
-    dispatch(boardSlice.actions.editBoard({ name, newColumns}));
-    dispatch(boardSlice.actions.setActiveBoard());
+    name !== activeBoard?.name ? nameChanged = true : nameChanged = false;
+    const newCol = newColumns.map(col => {
+      let originalCol = columns?.find(column => column?.id === col.id);
+      if (originalCol && (originalCol.name !== col?.name))
+        col.updated = true;
+      if(!originalCol)
+        col.new = true;
+
+      return {
+        name: col?.name,
+        id: col.id || null,
+        updated: col.updated || false,
+        deleted: false,
+        new: col?.new || false
+      }
+    }).filter(col => col.updated !== false || col.new !== false);
+
+    const buckets = [...newCol, ...deletedColumns]
+    if(nameChanged === false && buckets.length === 0){
+      setIsEditBoardModalOpen(false);
+      return;
+    } 
+
+    const response = await dispatch(useEditBoard({name, nameChanged, id: activeBoard.id, buckets }))
+    console.log(response.payload.board)
+    dispatch(boardSlice.actions.editBoard({ board: response.payload.board}));
 
     notify("Board Edited");
     setIsEditBoardModalOpen(false);
@@ -107,7 +139,7 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdow
                 />
                 <img
                   src={crossIcon}
-                  onClick={() => onDelete(column.id)}
+                  onClick={() => onDelete(column)}
                   className=" m-4 cursor-pointer "
                 />
               </div>
