@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isNullOrUndefinedOrEmpty, isStringArrayValide } from '../../utils/validations';
 import notify from '../../utils/notify';
 import { cloneDeep } from 'lodash';
+import { useUpdateTaskChangeBucket, useUpdateTaskSameBucket } from '../../redux/boardSLiceThunk';
 
 const EditTaskModal = ({setIsEditTaskModalOpen}) => {
 
@@ -13,7 +14,6 @@ const EditTaskModal = ({setIsEditTaskModalOpen}) => {
 
   const activeBoard = useSelector(state => state.boardsData.activeBoard);
   const columns = activeBoard.columns;
-  const editColumn = useSelector(state => state.boardsData.addOrEditColumn);
   const editingTask = useSelector(state => state.boardsData.editTask);
   const editTask = cloneDeep(editingTask);
   const [status, setStatus] = useState(editTask?.status);
@@ -21,9 +21,24 @@ const EditTaskModal = ({setIsEditTaskModalOpen}) => {
   const [title, setTitle] = useState(editTask?.title);
   const [description, setDescription] =  useState(editTask?.description);
   const [subtasks, setSubtasks] = useState(cloneDeep(editTask.subtasks));
+  const [completedSubtaks, setCompletedSubtaks] = useState([])
 
-  const onDelete = (id) => {
-    setSubtasks((prevState) => prevState.filter((el) => el.id !== id));
+  const onDelete = (subtask) => {
+    
+    if(subtask.existing){
+      const complete = {
+        id: subtask.id,
+        title: subtask.title,
+        isCompleted: subtask.isCompleted,
+        deleted: true,
+        updated: false,
+        new: false,
+        taskId: subtask.taskId
+      };
+      setCompletedSubtaks(prevState => ([...prevState,complete]))
+    }
+
+    setSubtasks((prevState) => prevState.filter((el) => el.id !== subtask.id));
   };
 
   const onChangeSubtasks = (id, newValue) => {
@@ -36,7 +51,7 @@ const EditTaskModal = ({setIsEditTaskModalOpen}) => {
   };
 
    // Edition task
-   const onSubmit = () => {
+   const onSubmit = async() => {
     // run form validation
     const data = subtasks?.map(col => col?.title);
 
@@ -46,26 +61,46 @@ const EditTaskModal = ({setIsEditTaskModalOpen}) => {
       return;
     }
 
+    const newSubtasks = subtasks?.map(subtask => {
+      let originalSubtask = editTask?.subtasks?.find(sub => sub?.id === subtask?.id);
+      if(originalSubtask && originalSubtask?.title !== subtask?.title)
+        subtask.updated = true;
+      if(!originalSubtask)
+        subtask.new = true
+      
+      return {
+        id: subtask.id,
+        title: subtask.title,
+        isCompleted: subtask.isCompleted,
+        deleted: false,
+        updated: subtask.updated || false,
+        new: subtask.new || false,
+        taskId: subtask.taskId
+      }
+    })?.filter(subtak => subtak.updated !== false || subtak.new !== false);
+
     const task = {
-      title,
-      description,
-      subtasks,
+      title: editTask.title !== title ? title : null,
+      description : editTask.description !== description ? description : null,
+      subtasks: [...newSubtasks, ...completedSubtaks],
       id: editTask.id,
-      status,
-      pos: editTask.pos
+      status: editTask.status !== status ? status : null,
+      bucketId: editTask.bucketId
     }
 
-    if(status === editingTask.status){
-      // update in same column
-      dispatch(boardSlice.actions.updateTaskSameColumn({ task}));
+    if(!task.description && !task.status && !task.title && task.subtasks.length === 0 ){
+      setIsEditTaskModalOpen(false);
+      return;
+    }
+
+    if(task.status === null){
+      const response = await dispatch(useUpdateTaskSameBucket(task));
+      response.payload.bucket && dispatch(boardSlice.actions.updatedBucket({ bucket: response.payload.bucket}));
     }else{
-      // update in different column
-      const newCol = columns.find(col => col.name === status);
-      dispatch(boardSlice.actions.updateTaskNewColumn({ task, newColId: newCol.id }));
-      dispatch(boardSlice.actions.deleteTask({ task }));
+      const response =  await dispatch(useUpdateTaskChangeBucket(task));
+      response.payload.board && dispatch(boardSlice.actions.updatedBoad({ board: response.payload.board})); 
     }
     
-    dispatch(boardSlice.actions.setActiveBoard());
     notify("Task updated");
     setIsEditTaskModalOpen(false);
   };
@@ -76,6 +111,8 @@ const EditTaskModal = ({setIsEditTaskModalOpen}) => {
       onClick={e => {
         if(e.target !== e.currentTarget) return;
         setIsEditTaskModalOpen(false);
+        dispatch(boardSlice.actions.resetAddOrEditColumn())
+        dispatch(boardSlice.actions.resetEditTask())
       }}
     >
       {/* Add Task Modal Section */}
@@ -137,7 +174,7 @@ const EditTaskModal = ({setIsEditTaskModalOpen}) => {
               <img
                 src={crossIcon}
                 onClick={() => {
-                  onDelete(subtask.id);
+                  onDelete(subtask);
                 }}
                 className=" m-4 cursor-pointer "
               />

@@ -75,8 +75,7 @@ const EditBoardModal= ({setIsEditBoardModalOpen, setIsElipsisMenuOpen, isDropdow
 
     const response = await dispatch(useEditBoard({name, nameChanged, id: activeBoard.id, buckets }))
     console.log(response.payload.board)
-    dispatch(boardSlice.actions.editBoard({ board: response.payload.board}));
-
+    dispatch(boardSlice.actions.updatedBoad({ board: response.payload.board}));
     notify("Board Edited");
     setIsEditBoardModalOpen(false);
   };

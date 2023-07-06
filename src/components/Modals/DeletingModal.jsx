@@ -46,8 +46,8 @@ const DeleteBoardModal = ({}) => {
   const onDeleteBtnClick = async() => {
 
     if(columnToDelete?.id && !taskToDelete?.id){// Delete Column
-      dispatch(boardSlice.actions.deleteColumn());
-      await dispatch(useDeleteBucket(columnToDelete?.id))
+      const res = await dispatch(useDeleteBucket(columnToDelete?.id))
+      dispatch(boardSlice.actions.updatedBoad({board: res.payload.board}));
       notify("Column Deleted");
     } else if(!columnToDelete?.id && taskToDelete?.id){ // Delete Task
 

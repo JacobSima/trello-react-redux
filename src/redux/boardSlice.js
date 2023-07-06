@@ -120,13 +120,27 @@ const boardSlice = createSlice({
       return state;
     },
 
-    deleteColumn: (state) => {
+    updatedBoad: (state, action) => {
       state = cloneDeep(state);
       const board = state.boards?.find(board => board.isActive);
-      board.columns = board?.columns?.filter(col => col.id !== state.columnToDelete.id);
-
+      state.boards?.splice(state.boards?.indexOf(board), 1, action.payload.board);
+      state.activeBoard = action.payload.board
       state.searchString = "";
       return state;
+    },
+
+    updatedBucket: (state, action) => {
+      state = cloneDeep(state);
+      const bucket = action.payload.bucket
+      let addOrEditColumn = state.addOrEditColumn;
+      const board = state.boards?.find(board => board.id === state.activeBoard.id);
+      const column = board.columns?.find(col => col?.id === addOrEditColumn.id)
+
+      board?.columns?.splice(board?.columns?.indexOf(column), 1, bucket)
+      state.activeBoard = board
+      state.searchString = "";
+      
+      return state; 
     },
 
     setAddEditColumn: (state, action) => {
@@ -146,6 +160,12 @@ const boardSlice = createSlice({
       state.editTask = action.payload.task;
       return state;
     },
+    
+    resetEditTask: (state) => {
+      state = cloneDeep(state);
+      state.editTask = {};
+      return state;
+    },
 
     addNewTask: (state, action) => {
       state = cloneDeep(state);
@@ -163,13 +183,11 @@ const boardSlice = createSlice({
 
     updateTaskSameColumn: (state, action) => {
       state = cloneDeep(state);
-      let addOrEditColumn = state.addOrEditColumn;
       const newTask = action.payload.task;
 
       const board = state.boards?.find(board => board.id === state.activeBoard.id);
-      const column = board.columns?.find(col => col?.id === addOrEditColumn.id);
+      const column = board.columns?.find(col => col?.id === newTask.bucketId);
       let oldTask = column?.tasks?.find(task => task.id === newTask.id);
-      newTask.pos = oldTask.pos;
 
       column?.tasks?.splice(oldTask.pos, 1, newTask);
       state.addOrEditColumn = {};

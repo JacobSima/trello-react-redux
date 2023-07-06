@@ -121,3 +121,33 @@ export const useCreateTask = createAsyncThunk('board/createTask', async (data) =
     return console.log(err);
   }
 })
+
+/**
+ * This is a Thunk to get all Boards data 
+ */
+export const useUpdateTaskSameBucket = createAsyncThunk('board/edittask', async (data) => {
+  const headers = {'Content-Type': 'application/json'};
+  const options = {method: 'put', headers: headers, body: JSON.stringify(data)}
+  try {
+    const res = await fetch("/api/tasks/edittasksamebucket", options);
+    const result = await res.json();
+    return result;
+  } catch (err) {
+    return console.log(err);
+  }
+})
+
+/**
+ * This is a Thunk to get all Boards data 
+ */
+export const useUpdateTaskChangeBucket = createAsyncThunk('board/edittask', async (data) => {
+  const headers = {'Content-Type': 'application/json'};
+  const options = {method: 'put', headers: headers, body: JSON.stringify(data)}
+  try {
+    const res = await fetch("/api/tasks/edittaskchangebucket", options);
+    const result = await res.json();
+    return result;
+  } catch (err) {
+    return console.log(err);
+  }
+})

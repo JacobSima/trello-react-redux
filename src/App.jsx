@@ -7,6 +7,7 @@ import Center from './components/Center';
 import EmptyBoard from './components/EmptyBoard';
 import boardSlice from './redux/boardSlice';
 import { useGetBoards } from './redux/boardSLiceThunk';
+import { cloneDeep } from 'lodash';
 
 
 const App = () => {

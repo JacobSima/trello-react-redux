@@ -52,8 +52,8 @@ const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
     }
 
     const response = await dispatch(useCreateTask(task));
-    if(response.payload.task){
-      dispatch(boardSlice.actions.addNewTask({ task: response.payload.task}));
+    if(response.payload.bucket){
+      dispatch(boardSlice.actions.updatedBucket({ bucket: response.payload.bucket}));
       dispatch(boardSlice.actions.setActiveBoard());
       notify("Task Added");
       setIsAddTaskModalOpen(false);

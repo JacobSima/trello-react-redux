@@ -37,10 +37,8 @@ const AddColumnModal = ({setIsAddColumnModalOpen}) => {
     }
 
     const response = await dispatch(useCreateBucket(column));
-    if(response?.payload?.bucket){
-      dispatch(boardSlice.actions.addColumn({column: response?.payload?.bucket}));
-      dispatch(boardSlice.actions.setActiveBoard());
-
+    if(response?.payload?.board){
+      dispatch(boardSlice.actions.updatedBoad({ board: response.payload.board}));
       notify("Column Created");
       setIsAddColumnModalOpen(false);
     }
