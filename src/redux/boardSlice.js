@@ -135,6 +135,12 @@ const boardSlice = createSlice({
       return state;
     },
 
+    resetAddOrEditColumn: (state) => {
+      state = cloneDeep(state);
+      state.addOrEditColumn = {};
+      return state;
+    },
+
     setEditTask: (state, action) => {
       state = cloneDeep(state);
       state.editTask = action.payload.task;

@@ -50,8 +50,8 @@ const AddBoardModal = ({setIsAddBoardModalOpen, setBoardModalOpen, isDropdown}) 
     dispatch(boardSlice.actions.addBoard({ board: response.payload.board}));
 
     notify("Board Added");
-    setIsAddBoardModalOpen && setIsAddBoardModalOpen(false);
-    setBoardModalOpen && setBoardModalOpen(false)
+    setIsAddBoardModalOpen(false);
+    setBoardModalOpen(false)
   };
 
   return (
@@ -59,8 +59,8 @@ const AddBoardModal = ({setIsAddBoardModalOpen, setBoardModalOpen, isDropdown}) 
       className={`py-10 px-6 absolute left-0 right-0 ${boards?.length > 0 && isDropdown ? "bottom-[-100vh]" : "bottom-[-2vh]"}  top-16 bg-[#00000086]`}
       onClick={e => {
         if(e.target !== e.currentTarget) return;
-        setIsAddBoardModalOpen && setIsAddBoardModalOpen(false);
-        setBoardModalOpen && setBoardModalOpen(false)
+        setIsAddBoardModalOpen(false);
+        setBoardModalOpen(false)
       }}
     >
       <div>

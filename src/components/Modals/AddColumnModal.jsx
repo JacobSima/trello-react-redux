@@ -4,6 +4,7 @@ import { isNullOrUndefinedOrEmpty } from '../../utils/validations';
 import notify from '../../utils/notify';
 import boardSlice from '../../redux/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useCreateBucket } from '../../redux/boardSLiceThunk';
 
 const AddColumnModal = ({setIsAddColumnModalOpen}) => {
 
@@ -17,25 +18,32 @@ const AddColumnModal = ({setIsAddColumnModalOpen}) => {
   const [name, setName] = useState("");
 
   // Submit Creation
-  const onSubmit = () => {
+  const onSubmit = async() => {
     // run form validation
     if(isNullOrUndefinedOrEmpty(name)){
       notify("Form is invalid");
       return;
     }
 
+    const availableNames = activeBoard?.columns?.map(col => col?.name?.toLowerCase());
+    if(availableNames?.includes(name.toLowerCase())){
+      notify("Bucket's name already exists");
+      return;
+    }
+
     const column = {
       id: uuidv4(),
       name,
-      pos: columnsLength === 0 ? 0 : columnsLength,
-      tasks: []
     }
 
-    dispatch(boardSlice.actions.addColumn({column}));
-    dispatch(boardSlice.actions.setActiveBoard());
+    const response = await dispatch(useCreateBucket(column));
+    if(response?.payload?.bucket){
+      dispatch(boardSlice.actions.addColumn({column: response?.payload?.bucket}));
+      dispatch(boardSlice.actions.setActiveBoard());
 
-    notify("Column Created");
-    setIsAddColumnModalOpen(false);
+      notify("Column Created");
+      setIsAddColumnModalOpen(false);
+    }
   };
 
   return (

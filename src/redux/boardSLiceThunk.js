@@ -76,6 +76,7 @@ export const useDeleteBoard = createAsyncThunk('board/deleteBoard', async (board
   }
 })
 
+
 /**
  * This is a Thunk to get all Boards data 
  */
@@ -83,6 +84,37 @@ export const useDeleteBucket = createAsyncThunk('board/deleteBoard', async (buck
   const options = {method: 'delete'};
   try {
     const res = await fetch(`/api/bucket/${bucket_id}`, options);
+    const result = await res.json();
+    return result;
+  } catch (err) {
+    return console.log(err);
+  }
+})
+
+/**
+ * This is a Thunk to get all Boards data 
+ */
+export const useCreateBucket = createAsyncThunk('board/createBucket', async (data) => {
+  const headers = {'Content-Type': 'application/json'};
+  const options = {method: 'post', headers: headers, body: JSON.stringify(data)}
+  try {
+    const res = await fetch("/api/buckets", options);
+    const result = await res.json();
+    return result;
+  } catch (err) {
+    return console.log(err);
+  }
+})
+
+
+/**
+ * This is a Thunk to get all Boards data 
+ */
+export const useCreateTask = createAsyncThunk('board/createTask', async (data) => {
+  const headers = {'Content-Type': 'application/json'};
+  const options = {method: 'post', headers: headers, body: JSON.stringify(data)}
+  try {
+    const res = await fetch("/api/tasks", options);
     const result = await res.json();
     return result;
   } catch (err) {

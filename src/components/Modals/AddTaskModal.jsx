@@ -5,12 +5,13 @@ import boardSlice from '../../redux/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { isNullOrUndefinedOrEmpty, isStringArrayValide } from '../../utils/validations';
 import notify from '../../utils/notify';
+import { useCreateTask } from '../../redux/boardSLiceThunk';
 
 const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
 
   const dispatch = useDispatch();
 
-  const activeBoard = useSelector(state => state.boardsData.activeBoard);
+  const addOrEditColumn = useSelector(state => state.boardsData.addOrEditColumn);
 
   const [title, setTitle] = useState();
   const [description, setDescription] =  useState();
@@ -33,7 +34,7 @@ const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
   };
 
    // Edition of Board
-   const onSubmit = () => {
+   const onSubmit = async() => {
     // run form validation
     const data = subtasks?.map(col => col?.title);
 
@@ -46,15 +47,18 @@ const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
     const task = {
       title,
       description,
-      subtasks,
-      id: uuidv4(),
+      subtasks: data,
+      bucketId: addOrEditColumn.id,
     }
 
-    dispatch(boardSlice.actions.addNewTask({ task}));
-    dispatch(boardSlice.actions.setActiveBoard());
-
-    notify("Task Added");
-    setIsAddTaskModalOpen(false);
+    const response = await dispatch(useCreateTask(task));
+    if(response.payload.task){
+      dispatch(boardSlice.actions.addNewTask({ task: response.payload.task}));
+      dispatch(boardSlice.actions.setActiveBoard());
+      notify("Task Added");
+      setIsAddTaskModalOpen(false);
+      dispatch(boardSlice.actions.resetAddOrEditColumn())
+    }
   };
 
   return (
@@ -63,6 +67,7 @@ const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
       onClick={e => {
         if(e.target !== e.currentTarget) return;
         setIsAddTaskModalOpen(false);
+        dispatch(boardSlice.actions.resetAddOrEditColumn())
       }}
     >
       {/* Add Task Modal Section */}
