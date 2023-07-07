@@ -4,8 +4,8 @@ import { Provider, useDispatch, useSelector } from 'react-redux'
 import boardSlice from '../redux/boardSlice'
 import crossIcon from '../assets/icon-cross.svg'
 import { cloneDeep } from 'lodash'
-import { isNullOrUndefinedOrEmpty, isObjectEmpty } from '../utils/validations'
-import { Draggable } from 'react-beautiful-dnd'
+import { isNullOrUndefinedOrEmpty } from '../utils/validations'
+import { Draggable, Droppable } from 'react-beautiful-dnd'
 
 const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
 
@@ -33,34 +33,6 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
     />
   )))
 
-  const dragOverTask = useSelector(state => state.boardsData.dragOverTask);
-  const handleOnDrop = e => {
-    const { draggedTask, prevCol} = JSON.parse(
-      e.dataTransfer.getData("taskData")
-    );
-
-    // Dropping in the same column
-    if(prevCol.id === col.id){
-      dispatch(boardSlice.actions.insertDraggedTaskSameColumn({posDragged: draggedTask.pos, colId: col.id, posOver: dragOverTask.pos}))
-    }else{
-      // Dropping in different column
-      // 1. Remove from previous column
-      dispatch(boardSlice.actions.removedDraggedTaskFromPreviousColumn({taskId: draggedTask.id, colId: prevCol.id}));
-
-      // 2. Add in new column
-      draggedTask.status = col?.name;
-      if(isObjectEmpty(dragOverTask)){
-        // Push new task at the end of new column
-        draggedTask.pos = col?.tasks?.length;
-        dispatch(boardSlice.actions.pushNewDraggedTask({draggedTask, colId: col.id}));
-      }else{
-        // calculate the actual position to add in the column
-        dispatch(boardSlice.actions.insertDraggedTask({draggedTask, colId: col.id, pos: dragOverTask.pos}))
-      }
-    }
-  }
-
-  const hanldeOnDragOver = e => e.preventDefault();
 
   return (
     
@@ -70,11 +42,7 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
           <div
             {...provided.draggableProps}
             ref={provided.innerRef}
-            // onDrop={handleOnDrop}
-            // onDragOver={hanldeOnDragOver}
-            // on
             className="custom-scrollbar mt-[90px] min-w-[280px] ml-2"
-            // draggable
           >
             {/* Column Header */}
             <div
@@ -106,10 +74,22 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
                 </div>
             </div>
 
-            <div>
-              {/* Render Task */}
-              {renderTask()}
-            </div>
+            <Droppable droppableId={col.id} type="task">
+              {
+                provided => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    {/* Render Task */}
+                    {renderTask()}
+                    {provided.placeholder}
+                  </div>
+                )
+              }
+            </Droppable>
+            
+
           </div> 
         )
       }

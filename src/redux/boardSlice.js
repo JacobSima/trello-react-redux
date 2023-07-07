@@ -151,8 +151,16 @@ const boardSlice = createSlice({
       const destinationColumn = board?.columns?.find(col => col.pos === destinationIndex);
       sourceColumn.pos = destinationIndex;
       destinationColumn.pos = sourceIndex;
+      state.activeBoard = board;
 
       state.searchString = "";
+      return state;
+    },
+
+    draggedTaskSameBucket: (state,action) => {
+      let board = state.boards?.find(board => board.isActive);
+      board = action.payload.board
+      state.activeBoard = board
       return state;
     },
 
