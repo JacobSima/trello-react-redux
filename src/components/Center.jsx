@@ -13,7 +13,7 @@ import DeleteBoardModal from './Modals/DeleteBoardModal';
 import notify from '../utils/notify';
 import boardSlice from '../redux/boardSlice';
 import { cloneDeep } from 'lodash';
-import { useDeleteBoard, useDraggedColumn, useDraggedTaskInSameColumn } from '../redux/boardSLiceThunk';
+import { useDeleteBoard, useDraggedColumn, useDraggedTaskInDifferentColumn, useDraggedTaskInSameColumn } from '../redux/boardSLiceThunk';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 const Center = ({}) => {
@@ -76,7 +76,7 @@ const Center = ({}) => {
     }
 
     if(type === "task"){
-      const sameColumnDrop = {
+      const taskDropped = {
         sourcedroppableId: source.droppableId,
         sourceIndex: source.index,
         destinationDroppableId: destination.droppableId,
@@ -88,27 +88,29 @@ const Center = ({}) => {
 
       if(source.droppableId === destination.droppableId){ 
         // drop in the same column
-        const {board, taskPosition} = draggedTaskSameColumn(sameColumnDrop);
-        dispatch(boardSlice.actions.draggedTaskSameBucket({ board }));
+        const {board, taskPosition} = draggedTaskSameColumn(taskDropped);
+        dispatch(boardSlice.actions.draggedTask({ board }));
         dispatch(useDraggedTaskInSameColumn(taskPosition))
+        return;
       }else{
         // Dragging in a different column
-
+       const {board, startTaskPosition, finishTaskPosition, taskId} =  dragInDifferentColumn(taskDropped)
+       dispatch(boardSlice.actions.draggedTask({ board }));
+       const dragTaskDifferentColumn ={startTaskPosition,  finishTaskPosition, taskId}
+       dispatch(useDraggedTaskInDifferentColumn(dragTaskDifferentColumn))
       }
 
     }
   }
 
-  const draggedTaskSameColumn = (sameColumnDrop) => {
+  const draggedTaskSameColumn = (taskDropped) => {
     const {
       sourcedroppableId, 
       sourceIndex, 
-      destinationDroppableId,
       destinationIndex
-    } = sameColumnDrop
+    } = taskDropped
     const board = activeBoard;
     let startCol = board?.columns?.find(col => col.id === sourcedroppableId);
-    // let finishCol = board?.columns?.find(col => col.id === destinationDroppableId);
     let startTasks = startCol?.tasks;
     const [taskMove] = startTasks.splice(sourceIndex, 1);
     startTasks.splice(destinationIndex, 0, taskMove)
@@ -122,6 +124,45 @@ const Center = ({}) => {
       })) ?? []
     }
     return { board, taskPosition }
+  }
+
+  const dragInDifferentColumn = (taskDropped) => {
+    const {
+      sourcedroppableId, 
+      sourceIndex, 
+      destinationDroppableId,
+      destinationIndex
+    } = taskDropped;
+
+    const board = activeBoard;
+    let startCol = board?.columns?.find(col => col.id === sourcedroppableId);
+    let finishCol = board?.columns?.find(col => col.id === destinationDroppableId);
+
+    // Remove from start column
+    let startTasks = startCol?.tasks;
+    const [taskMove] = startTasks?.splice(sourceIndex, 1);
+    startTasks?.forEach((task,index )=> {task.pos = index})
+    const startTaskPosition = {
+      bucketId: sourcedroppableId,
+      tasksPosition : startTasks?.map(task => ({
+        id: task.id,
+        pos: Number(task.pos)
+      })) ?? []
+    }
+
+    // Add in new column
+    let finishTasks = finishCol.tasks;
+    finishTasks?.splice(destinationIndex, 0, taskMove)
+    finishTasks?.forEach((task,index )=> {task.pos = index})
+    const finishTaskPosition = {
+      bucketId: destinationDroppableId,
+      tasksPosition : finishTasks?.map(task => ({
+        id: task.id,
+        pos: Number(task.pos)
+      })) ?? []
+    }
+
+    return {board, startTaskPosition, finishTaskPosition, taskId: taskMove.id};
   }
 
   return (

@@ -183,3 +183,19 @@ export const useDraggedTaskInSameColumn = createAsyncThunk('board/ontaskdraggeds
     return console.log(err);
   }
 })
+
+
+/**
+ * This is a Thunk to get all Boards data 
+ */
+export const useDraggedTaskInDifferentColumn = createAsyncThunk('board/ontaskdraggeddifferentcolumn', async (data) => {
+  const headers = {'Content-Type': 'application/json'};
+  const options = {method: 'put', headers: headers, body: JSON.stringify(data)}
+  try {
+    const res = await fetch("/api/boards/ontaskdraggeddifferentcolumn", options);
+    const result = await res.json();
+    return result;
+  } catch (err) {
+    return console.log(err);
+  }
+})

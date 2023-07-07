@@ -14,8 +14,6 @@ const initState = {
 
   // Drag and Drop
   dragOverTask: {},
-
-
   // General Modal open/close status
 }
 
@@ -157,7 +155,7 @@ const boardSlice = createSlice({
       return state;
     },
 
-    draggedTaskSameBucket: (state,action) => {
+    draggedTask: (state,action) => {
       let board = state.boards?.find(board => board.isActive);
       board = action.payload.board
       state.activeBoard = board
