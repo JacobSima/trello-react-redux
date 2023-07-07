@@ -13,7 +13,8 @@ import DeleteBoardModal from './Modals/DeleteBoardModal';
 import notify from '../utils/notify';
 import boardSlice from '../redux/boardSlice';
 import { cloneDeep } from 'lodash';
-import { useDeleteBoard } from '../redux/boardSLiceThunk';
+import { useDeleteBoard, useDraggedColumn } from '../redux/boardSLiceThunk';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 const Center = ({}) => {
 
@@ -35,7 +36,7 @@ const Center = ({}) => {
   // Global state
   const activeBoard = useSelector(state => state.boardsData.activeBoard);
   const isDeleteModalOpenTaskOrColumn = useSelector(state => state.boardsData.isDeleteModalOpen);
-  const columns = cloneDeep(activeBoard.columns);
+  const columns = cloneDeep(activeBoard.columns)?.sort((a,b) => a.pos - b.pos);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -57,6 +58,28 @@ const Center = ({}) => {
       notify("Board Deleted"); 
       setIsDeleteModalOpen(false);
     }
+  }
+  const onDragEnd = async(result) => {
+    const {destination, source, draggableId, type} = result;
+    if(!destination) return;
+    if(destination.index > source.index + 1 || destination.idndex < source.index -1) return;
+    if(type === "column" &&  destination.index === source.index) return;
+
+    if(type === "column"){
+
+      const draggedColumn = {
+        sourceIndex: Number(source.index),
+        destinationIndex: Number(destination.index)  
+      }
+      dispatch(boardSlice.actions.updatedDraggedBuckets({ draggedColumn }));
+      dispatch(useDraggedColumn(draggedColumn));
+      dispatch(boardSlice.actions.setActiveBoard());
+      return 
+    }
+
+    // if(type === "task"){
+
+    // }
   }
 
   return (
@@ -81,16 +104,34 @@ const Center = ({}) => {
       
       {/* Columns Section */}
       {columns?.length > 0 ? (
-        <>
-          {columns.map((col, index) => (
-            <Column 
-              key={index} 
-              colIndex={index} 
-              col={col}
-              setIsAddTaskModalOpen={setIsAddTaskModalOpen}
-              setIsEditTaskModalOpen={setIsEditTaskModalOpen}
-              />
-           ))}
+        <div className='flex'>
+
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="all-columns" direction="horizontal" type="column">
+              {
+                provided => (
+                  <div
+                    className="flex"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}   
+                  >
+                    {columns.map((col, index) => (
+                      <Column 
+                        key={index} 
+                        colIndex={index} 
+                        col={col}
+                        setIsAddTaskModalOpen={setIsAddTaskModalOpen}
+                        setIsEditTaskModalOpen={setIsEditTaskModalOpen}
+                        />
+                    ))}
+                  {provided.placeholder}
+                  </div>
+                )
+              }
+            </Droppable>
+
+          </DragDropContext>
+          
           <div
             onClick={() => {
               setIsAddColumnModalOpen(true);
@@ -101,7 +142,7 @@ const Center = ({}) => {
           >
             + Add New Column
           </div>
-        </>
+        </div>
       ) : (
         <>
           <EmptyColumn />

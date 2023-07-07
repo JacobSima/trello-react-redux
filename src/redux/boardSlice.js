@@ -143,6 +143,19 @@ const boardSlice = createSlice({
       return state; 
     },
 
+    updatedDraggedBuckets: (state, action) => {
+      state = cloneDeep(state);
+      const {sourceIndex, destinationIndex} =  action.payload.draggedColumn;
+      const board = state.boards?.find(board => board.isActive);
+      const sourceColumn = board?.columns?.find(col => col.pos === sourceIndex);
+      const destinationColumn = board?.columns?.find(col => col.pos === destinationIndex);
+      sourceColumn.pos = destinationIndex;
+      destinationColumn.pos = sourceIndex;
+
+      state.searchString = "";
+      return state;
+    },
+
     setAddEditColumn: (state, action) => {
       state = cloneDeep(state);
       state.addOrEditColumn = action.payload.col;

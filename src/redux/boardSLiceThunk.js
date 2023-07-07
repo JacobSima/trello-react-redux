@@ -151,3 +151,19 @@ export const useUpdateTaskChangeBucket = createAsyncThunk('board/edittask', asyn
     return console.log(err);
   }
 })
+
+
+/**
+ * This is a Thunk to get all Boards data 
+ */
+export const useDraggedColumn = createAsyncThunk('board/oncolumndragged', async (data) => {
+  const headers = {'Content-Type': 'application/json'};
+  const options = {method: 'put', headers: headers, body: JSON.stringify(data)}
+  try {
+    const res = await fetch("/api/boards/oncolumndragged", options);
+    const result = await res.json();
+    return result;
+  } catch (err) {
+    return console.log(err);
+  }
+})
