@@ -82,20 +82,22 @@ const Header = () => {
         {/* Right Side */}
         {
           !isDropDownOpen && boards?.length > 0 && (
-            <div className="flex items-center md:space-x-6">
-              {/* Serach box */}
-              <form className="flex items-center  md:space-x-5 md:p-1 bg-white rounded-md  shadow-md flex-1 md:flex-initial">
-                  <MagnifyingGlassIcon className="h-4 w-4 md:h-6 md:w-6 text-gray-400"/>
-                  <input 
-                    type="text" 
-                    placeholder="Search" 
-                    value={searchString}
-                    onChange={setSearchStringLocal}
-                    className="flex-1 outline-none p-2 md:p-2"/>
-                  <button hidden type="submit">Search</button>
-                </form>
-                {/* Avatar */}
-                <Avatar name="Jacob Sima" round size="50" className="cprimary hidden md:block"/>
+            <div className="hidden md:block">
+              <div className="flex items-center md:space-x-6">
+                {/* Serach box */}
+                <form className="flex  items-center  md:space-x-5 md:p-1 bg-white rounded-md  shadow-md flex-1 md:flex-initial">
+                    <MagnifyingGlassIcon className="h-4 w-4 md:h-6 md:w-6 text-gray-400"/>
+                    <input 
+                      type="text" 
+                      placeholder="Search" 
+                      value={searchString}
+                      onChange={setSearchStringLocal}
+                      className="flex-1 outline-none p-2 md:p-2"/>
+                    <button hidden type="submit">Search</button>
+                  </form>
+                  {/* Avatar */}
+                  <Avatar name="Jacob Sima" round size="50" className="cprimary"/>
+              </div>
             </div>
           )
         }

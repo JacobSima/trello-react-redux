@@ -62,7 +62,7 @@ const Center = ({}) => {
   const onDragEnd = async(result) => {
     const {destination, source, draggableId, type} = result;
     if(!destination) return;
-    if(destination.index > source.index + 1 || destination.idndex < source.index -1) return;
+    // if(destination.index > source.index + 1 || destination.idndex < source.index -1) return;
     if(type === "column" &&  destination.index === source.index) return;
 
     if(type === "column"){
@@ -153,11 +153,16 @@ const Center = ({}) => {
     // Add in new column
     let finishTasks = finishCol.tasks;
     finishTasks?.splice(destinationIndex, 0, taskMove)
-    finishTasks?.forEach((task,index )=> {task.pos = index})
+    finishTasks?.forEach((task,index )=> {
+      task.pos = index;
+      if(task.id === taskMove.id){
+        task.status = finishCol.name;
+      }
+    })
     const finishTaskPosition = {
       bucketId: destinationDroppableId,
       tasksPosition : finishTasks?.map(task => ({
-        id: task.id,
+        id: task.id, 
         pos: Number(task.pos)
       })) ?? []
     }
@@ -168,8 +173,8 @@ const Center = ({}) => {
   return (
     <div
       className={windowSize[0] >= 768 && isSideBarOpen 
-      ? "bg-[#f4f7fd]  h-screen flex dar:bg-[#20212c] overflow-y-hidden  gap-0 ml-[290px] " 
-      : "bg-[#f4f7fd]  h-screen flex dark:bg-[#20212c] overflow-y-hidden gap-0"}
+      ? "bg-[#f4f7fd]  h-screen flex dar:bg-[#20212c] overflow-y-hidden  gap-0 ml-[290px] center_scroll" 
+      : "bg-[#f4f7fd]  h-screen flex dark:bg-[#20212c] overflow-y-hidden gap-0 center_scroll"}
     >
 
       {/* SideBar section */}

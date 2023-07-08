@@ -7,8 +7,6 @@ const Task = ({taskIndex, colIndex, task, setIsEditTaskModalOpen, col}) => {
 
   const dispatch = useDispatch();
 
-  const [isDragging, setIsDragging] = useState(false);
-
   let completed = 0;
   let subtasks = task.subtasks;
   subtasks.forEach((subtask) => {
@@ -22,20 +20,6 @@ const Task = ({taskIndex, colIndex, task, setIsEditTaskModalOpen, col}) => {
     setIsEditTaskModalOpen(true);
     dispatch(boardSlice.actions.setAddEditColumn({col}));
     dispatch(boardSlice.actions.setEditTask({task}));
-  }
-
-  const handleOnDragStart = (e) => {
-    setIsDragging(true);
-    e.dataTransfer.setData(
-      "taskData",
-      JSON.stringify({ draggedTask: task, prevCol: col})
-    );
-  };
-
-  // change opacity of the dragging element
-  const handleDragEnd = e => {
-    isDragging && setIsDragging(false);
-    dispatch(boardSlice.actions.resetDragOverTask());
   }
 
   return (

@@ -11,6 +11,26 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.center_scroll::-webkit-scrollbar {
+  width: 0.9em;
+  height: 0.9em;
+}
+
+.center_scroll::-webkit-scrollbar-track {
+  border-radius: 100vw;
+}
+
+.center_scroll::-webkit-scrollbar-thumb{
+  background: #b9c8e7;
+  border-radius: 100vw;
+  margin-block: 0.5em;
+}
+
+.center_scroll::-webkit-scrollbar-thumb:hover{
+  background: #a1b0cf;
+  opacity: 0.7;
+}
+
 @layer components {
   .button {
     @apply bg-[#BB5450] py-2 px-4 rounded-full text-white text-lg font-semibold hover:opacity-80 duration-200 
@@ -30,19 +50,19 @@ body {
 
   }
 
-  .dragging {
-    opacity: 0.5;
+  .select-status{
+    background-image: url("./assets/icon-chevron-down.svg");
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 16px top 50%;
+  }
+
+  .cprimary {
+    color: #BB5450;
   }
 }
 
-.select-status{
-  background-image: url("./assets/icon-chevron-down.svg");
-  appearance: none;
-  background-repeat: no-repeat;
-  background-position: right 16px top 50%;
-}
 
-.cprimary {
-  color: #BB5450;
-}
+
+
 

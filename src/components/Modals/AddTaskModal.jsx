@@ -63,7 +63,7 @@ const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
 
   return (
     <div
-      className={`py-10 px-6 absolute left-0 right-0 bottom-[-2vh]  top-16 bg-[#00000086]`}
+      className={`py-10 px-6 absolute left-0 right-0 bottom-[-0vh]  top-16 bg-[#00000086]`}
       onClick={e => {
         if(e.target !== e.currentTarget) return;
         setIsAddTaskModalOpen(false);
@@ -75,6 +75,16 @@ const AddTaskModal = ({setIsAddTaskModalOpen, setIsEditTaskModalOpen}) => {
         className=" custom-scrollbar max-h-[80vh]  my-auto  bg-white dark:bg-[#2b2c37] text-black dark:text-white font-bold
         shadow-md shadow-[#364e7e1a] max-w-md mx-auto  w-full px-8  py-8 rounded-xl"
       >
+        <div className="felx justify-end">
+          <img
+            src={crossIcon}
+            onClick={() => {
+              setIsAddTaskModalOpen(false);
+            }}
+            className="h-4 w-4 cursor-pointer float-right close-modal"
+          />
+        </div>
+
         <h3 className="text-lg">Add New Task</h3>
 
         {/* Task Name */}

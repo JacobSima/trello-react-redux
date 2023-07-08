@@ -83,10 +83,7 @@ const Column = ({colIndex, col, setIsAddTaskModalOpen, setIsEditTaskModalOpen}) 
                   >
                     {/* Render Task */}
                     {renderTask()}
-                    { 
-                      // col?.tasks?.length === 0 && (<div className='h-4'></div>)
-                    }
-                    <div className='h-4'></div>
+                    <div className='min-h-[50px]'></div>
                     {provided.placeholder}
                   </div>
                 )
