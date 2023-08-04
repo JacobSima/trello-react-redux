@@ -26,10 +26,10 @@ const Sidebar = ({
     setIsSideBarOpen(curr => !curr);
   };
 
-  const updateActiveBoard = (index) => {
-    dispatch(useUpdateActiveBoards(index));
+  const updateActiveBoard = (index, boardId) => {
     dispatch(boardSlice.actions.updateActiveBoard(index));
     dispatch(boardSlice.actions.setActiveBoard());
+    dispatch(useUpdateActiveBoards(boardId));
     setIsElipsisMenuOpen(false);
   }
 
@@ -79,7 +79,7 @@ const Sidebar = ({
                         " bg-[#BB5450] rounded-r-full text-white mr-8 "
                       } `}
                       key={index}
-                      onClick={() => updateActiveBoard(index)}
+                      onClick={() => updateActiveBoard(index, board.id)}
                     >
                       <img src={boardIcon} className="  filter-white  h-4" />
                       <p className=" text-lg font-bold ">{board.name}</p>

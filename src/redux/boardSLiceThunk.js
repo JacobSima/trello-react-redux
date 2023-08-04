@@ -17,9 +17,9 @@ export const useGetBoards = createAsyncThunk('board/getboards', async () => {
 /**
  * This is a Thunk to get all Boards data 
  */
-export const useUpdateActiveBoards = createAsyncThunk('board/updateActiveBoard', async (index) => {
+export const useUpdateActiveBoards = createAsyncThunk('board/updateActiveBoard', async (id) => {
   try {
-    const res = await fetch(`api/boards/updateactiveboard/${index}`);
+    const res = await fetch(`api/boards/updateactiveboard/${id}`);
     const result = await res.json();
     return result
   } catch (err) {
