@@ -149,6 +149,7 @@ const boardSlice = createSlice({
       const destinationColumn = board?.columns?.find(col => col.pos === destinationIndex);
       sourceColumn.pos = destinationIndex;
       destinationColumn.pos = sourceIndex;
+      board?.columns?.sort((a,b) => a.pos - b.pos)
       state.activeBoard = board;
 
       state.searchString = "";
@@ -156,7 +157,9 @@ const boardSlice = createSlice({
     },
 
     draggedTask: (state,action) => {
+      state = cloneDeep(state);
       let board = state.boards?.find(board => board.isActive);
+      state.boards?.splice(state.boards?.indexOf(board), 1, action.payload.board);
       board = action.payload.board
       state.activeBoard = board
       return state;

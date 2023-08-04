@@ -36,7 +36,7 @@ const Center = ({}) => {
   // Global state
   const activeBoard = cloneDeep(useSelector(state => state.boardsData.activeBoard));
   const isDeleteModalOpenTaskOrColumn = useSelector(state => state.boardsData.isDeleteModalOpen);
-  const columns = cloneDeep(activeBoard.columns)?.sort((a,b) => a.pos - b.pos);
+  const columns = cloneDeep(activeBoard.columns);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -50,14 +50,13 @@ const Center = ({}) => {
   }, []);
 
   const deleteBoard = async() => {
-
-    const response = await dispatch(useDeleteBoard(activeBoard?.id)) 
-    if(response.payload){
-      dispatch(boardSlice.actions.deleteBoard({id : activeBoard?.id}));
-      dispatch(boardSlice.actions.setActiveBoard());
-      notify("Board Deleted"); 
-      setIsDeleteModalOpen(false);
-    }
+    const boardId = activeBoard?.id;
+    dispatch(boardSlice.actions.deleteBoard());
+    dispatch(boardSlice.actions.setActiveBoard());
+    await dispatch(useDeleteBoard(boardId)) 
+      
+    notify("Board Deleted"); 
+    setIsDeleteModalOpen(false);
   }
   const onDragEnd = async(result) => {
     const {destination, source, draggableId, type} = result;
@@ -68,7 +67,9 @@ const Center = ({}) => {
     if(type === "column"){
       const draggedColumn = {
         sourceIndex: Number(source.index),
-        destinationIndex: Number(destination.index)  
+        sourceId: columns[Number(source.index)]?.id,
+        destinationIndex: Number(destination.index),
+        destinationId: columns[Number(destination.index)]?.id 
       }
       dispatch(boardSlice.actions.updatedDraggedBuckets({ draggedColumn }));
       dispatch(useDraggedColumn(draggedColumn));
