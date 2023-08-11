@@ -32,7 +32,7 @@ const AddColumnModal = ({setIsAddColumnModalOpen}) => {
     }
 
     const column = {
-      id: uuidv4(),
+      boardId: uuidv4(),
       name,
     }
 
