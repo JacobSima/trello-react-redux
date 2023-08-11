@@ -11,6 +11,9 @@ services:
     restart: unless-stopped
     networks:
       - opuskanban-backend_opuskanbanbackend
+    volumes:
+      - /app/node_modules     # No copy the node_modules, this can br also ignore from .dockerignore file
+      - .:/app    #  copy all files and folders to the docker container inside the app folder
 
 networks:
   opuskanban-backend_opuskanbanbackend:
