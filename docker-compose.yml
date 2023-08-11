@@ -2,10 +2,10 @@ version: "3.8"
 name: opuskanban-frontend
 
 services:  
-  app:
+  web:
     container_name: app
     build: .
-    command: "npm run preview"
+    command: "npm run dev"
     ports:
       - 8001:8001
     restart: unless-stopped
@@ -13,7 +13,7 @@ services:
       - opuskanban-backend_opuskanbanbackend
     volumes:
       - /app/node_modules     # No copy the node_modules, this can br also ignore from .dockerignore file
-      - .:/app    #  copy all files and folders to the docker container inside the app folder
+      - .:/app                # Copy all files and folders to the docker container inside the app folder
 
 networks:
   opuskanban-backend_opuskanbanbackend:

@@ -13,16 +13,7 @@ export default defineConfig({
     port: process.env.VITE_REACT_PORT,
     proxy: {
       '/api': {
-        target: process.env.VITE_REACT_LOCAL_URL,
-        changeOrigin: true
-      }
-    }
-  },
-  preview: {
-    host: true,
-    port: process.env.VITE_REACT_PORT,
-    proxy: {
-      '/api': {
+        // target: process.env.VITE_REACT_LOCAL_URL,  // localhost
         target: process.env.VITE_REACT_DOCKER_URL, // connect to the backend server service
         changeOrigin: true
       }
