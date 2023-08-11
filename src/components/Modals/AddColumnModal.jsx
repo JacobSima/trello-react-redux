@@ -31,10 +31,7 @@ const AddColumnModal = ({setIsAddColumnModalOpen}) => {
       return;
     }
 
-    const column = {
-      boardId: uuidv4(),
-      name,
-    }
+    const column = {name};
 
     const response = await dispatch(useCreateBucket(column));
     if(response?.payload?.board){
